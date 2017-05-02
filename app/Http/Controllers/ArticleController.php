@@ -41,10 +41,30 @@ class ArticleController extends Controller
 	 */
 	public function get()
 	{
-		$articles = Article::all()->sortByDesc('id')->values()->all();
+		$articles = Article::get()->sortByDesc('id')->values()->all();
 
 		return Response()->Json($articles);
 	}
+	/**
+     * Get a listing of the resource that contains(value, text).
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getList($option = null)
+    {
+        $articles = [];
+
+        if($option == 'filter'){
+            //Get all branch records filter status = enabled
+            $articles = Article::where('status',Status::ENABLED)->whereIn('id',array_column(auth::user()->articles, 'value'))->get(['id as value','name as text'])->sortBy('text')->values()->all();
+            
+        }elseif ($option == 'all') {
+            //Get all branch records
+            $articles = Article::get(['id as value','name as text'])->sortBy('text')->values()->all(); 
+        }
+        
+        return Response()->Json($articles);
+    }
 	/**
 	 * Store a newly created resource in storage.
 	 *
@@ -60,7 +80,7 @@ class ArticleController extends Controller
 
 				$articleObject = new Article();
 
-				$articleObject->title 				= 	$articleRequest->title;
+				$articleObject->name 				= 	$articleRequest->name;
 				$articleObject->description 		= 	$articleRequest->description;
 				$articleObject->status          	=   $articleRequest->status;
 				$articleObject->created_by      	=   auth::id();
@@ -93,7 +113,7 @@ class ArticleController extends Controller
 
 				$articleObject = Article::findOrFail($articleRequest->id);
 				
-				$articleObject->title 				= 	$articleRequest->title;
+				$articleObject->name 				= 	$articleRequest->name;
 				$articleObject->description 		= 	$articleRequest->description;
 				$articleObject->status          	=   $articleRequest->status;
 				$articleObject->updated_by      	=   auth::id();
