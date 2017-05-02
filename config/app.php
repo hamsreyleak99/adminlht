@@ -4,6 +4,35 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Application Name
+    |--------------------------------------------------------------------------
+    |
+    | This value is the name of your application. This value is used when the
+    | framework needs to place the application's name in a notification or
+    | any other location as required by the application or its packages.
+    */
+
+    'name' => 'LHT Admin',
+
+    // Menu logos
+    'logo_lg'   => '<b>LHT</b> Admin',
+    'logo_mini' => '<b>ILHT</b>',
+
+    // Developer or company name. Shown in footer.
+    'developer_name' => 'Sreyleak ham',
+
+    // Developer website. Link in footer.
+    'developer_link' => 'https://www.facebook.com/',
+
+    // Show powered by Laravel Backpack in the footer?
+    'show_powered_by' => true,
+
+    // The AdminLTE skin. Affects menu color and primary/secondary colors used throughout the application.
+    'skin' => 'skin-blue',
+    // Options: skin-black, skin-blue, skin-purple, skin-red, skin-yellow, skin-green, skin-blue-light, skin-black-light, skin-purple-light, skin-green-light, skin-red-light, skin-yellow-light
+
+    /*
+    |--------------------------------------------------------------------------
     | Application Environment
     |--------------------------------------------------------------------------
     |
