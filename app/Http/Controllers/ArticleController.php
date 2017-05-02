@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Article;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\Controller;
 
 class ArticleController extends Controller
 {
@@ -33,4 +34,107 @@ class ArticleController extends Controller
         $this->data['title'] = 'Article';
         return view('pages.article',$this->data);
     }
+    /**
+	 * Get a listing of the resource.
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function get()
+	{
+		$articles = Article::all()->sortByDesc('id')->values()->all();
+
+		return Response()->Json($articles);
+	}
+	/**
+	 * Store a newly created resource in storage.
+	 *
+	 * @param  \Illuminate\Http\Request  $request
+	 * @return \Illuminate\Http\Response
+	 */
+	public function store(Request $request)
+	{
+		$articlesRequest = json_decode($request->input('article'));
+
+		foreach ($articlesRequest as $key => $articleRequest) {
+			try {
+
+				$articleObject = new Article();
+
+				$articleObject->title 				= 	$articleRequest->title;
+				$articleObject->description 		= 	$articleRequest->description;
+				$articleObject->status          	=   $articleRequest->status;
+				$articleObject->created_by      	=   auth::id();
+				$articleObject->updated_by      	=   auth::id();
+
+				$articleObject->save();
+
+				$articlesResponse[] = $articleObject;
+
+			} catch (Exception $e) {
+					
+			}
+		}
+
+		return Response()->Json($articlesResponse);
+	}
+
+	/**
+	 * Update the specified resource in storage.
+	 *
+	 * @param  \Illuminate\Http\Request  $request
+	 * @return \Illuminate\Http\Response
+	 */
+	public function update(Request $request)
+	{
+		$articlesResponse = json_decode($request->input('article'));
+
+		foreach ($articlesResponse as $key => $articleRequest) {
+			try {
+
+				$articleObject = Article::findOrFail($articleRequest->id);
+				
+				$articleObject->title 				= 	$articleRequest->title;
+				$articleObject->description 		= 	$articleRequest->description;
+				$articleObject->status          	=   $articleRequest->status;
+				$articleObject->updated_by     	=   auth::id();
+
+				$articleObject->save();
+
+				$articlesResponse[] = $articleObject;
+					
+			} catch (Exception $e) {
+					
+			}
+		}
+
+		return Response()->Json($articlesResponse);
+	}
+
+	/**
+	 * Remove the specified resource from storage.
+	 *
+	 * @param  \Illuminate\Http\Request  $request
+	 * @return \Illuminate\Http\Response
+	 */
+	public function destroy(Request $request)
+	{
+		$articlesRequest = json_decode($request->input('article'));
+
+		foreach ($articlesRequest as $key => $articleRequest) {
+			try {
+
+				$articleObject = Article::findOrFail($articleRequest->id);
+
+				$articleObject->delete();
+
+				$articlesResponse[] = $articleRequest;
+
+					
+			} catch (Exception $e) {
+					
+			}
+		}
+
+		return Response()->Json($articlesResponse);
+	}
 }

@@ -31,29 +31,32 @@
 @section('after_scripts') 
     <script>
         $(document).ready(function () {
-            var crudServiceBaseUrl = "{{ url('') }}",
+            // var crudServiceBaseUrl = "{{ url('') }}",
                 dataSource = new kendo.data.DataSource({
                     transport: {
                         read:  {
-                            url: crudServiceBaseUrl + "/article/get",
-                            type: "GET",
+                            url: crudBaseUrl + "/article/get",
+                            type:"GET",
                             dataType: "json"
                         },
                         update: {
-                            url: crudServiceBaseUrl + "/Products/Update",
-                            dataType: "jsonp"
+                            url: crudBaseUrl + "/article/update",
+                            type:"POST",
+                            dataType: "json"
                         },
                         destroy: {
-                            url: crudServiceBaseUrl + "/Products/Destroy",
-                            dataType: "jsonp"
+                            url: crudBaseUrl + "/article/destroy",
+                            type:"POST",
+                            dataType: "json"
                         },
                         create: {
-                            url: crudServiceBaseUrl + "/Products/Create",
-                            dataType: "jsonp"
+                            url: crudBaseUrl + "/article/store",
+                            type:"POST",
+                            dataType: "json"
                         },
                         parameterMap: function(options, operation) {
                             if (operation !== "read" && options.models) {
-                                return {models: kendo.stringify(options.models)};
+                                return {article: kendo.stringify(options.models)};
                             }
                         }
                     },
@@ -63,11 +66,10 @@
                         model: {
                             id: "ID",
                             fields: {
-                                ProductID: { editable: false, nullable: true },
-                                ProductName: { validation: { required: true } },
-                                UnitPrice: { type: "number", validation: { required: true, min: 1} },
-                                Discontinued: { type: "boolean" },
-                                UnitsInStock: { type: "number", validation: { min: 0, required: true } }
+                                id: { editable: false, nullable: true },
+                                title: { type: "string" },
+                                description: { type: "string",nullable: true },
+                                status: { field: "status", type: "string", defaultValue: "Enabled" }
                             }
                         }
                     }
@@ -75,19 +77,65 @@
             $("#grid").kendoGrid({
                 dataSource: dataSource,
                 pageable: true,
+                navigatable: true,
+                resizable: true,
+                reorderable: true,
+                columnMenu: true,
+                filterable: true,
+                sortable: { mode: "single", allowUnsort: false },
+                pageable: { refresh:true, pageSizes: true, buttonCount: 5 },
                 height: 550,
-                toolbar: ["create"],
+                toolbar: [
+                    { name: "create", text: "Add New Article" }
+                ],
                 columns: [
-                    { field:"ProductName", title: "Product Name" },
-                    { field: "UnitPrice", title:"Unit Price", format: "{0:c}", width: "120px" },
-                    { field: "UnitsInStock", title:"Units In Stock", width: "120px" },
-                    { field: "Discontinued", width: "120px" },
-                    { command: ["edit", "destroy"], title: "&nbsp;", width: "250px" }],
-                editable: "popup"
+                    { field:"title", title: "Title" },
+                    { field: "description", title:"Description" },
+                    { field: "status", title: "Status", values: statusDataSource },
+                    { command: ["edit", "destroy"], title: "Action", menu: false }
+                ],
+                editable: { mode: "popup", window: { width: "600px" }, template: kendo.template($("#popup-editor-customer").html()) },
+
+                edit: function (e) {
+                  /*Customize popup title and button label*/
+                  if (e.model.isNew()) {
+                    e.container.data("kendoWindow").title('Add New Article');
+                    $(".k-grid-update").html('<span class="k-icon k-i-check"></span>Save');
+                  }
+                  else {
+                    e.container.data("kendoWindow").title('Edit Article');
+                  }
+
+                  /*Call function  init form control*/
+                  initFormControl(); 
+                }
             });
         });
+         function initFormControl(){
 
+         /*Initailize status dropdownlist*/
+         initStatusDropDownList();
+
+        }
     </script>
+    <!-- Customize popup editor customer --> 
+  <script type="text/x-kendo-template" id="popup-editor-customer">
+    <div class="row-12">
+        <div class="col-12">
+          <label for="title">Title</label>
+          <input type="text" class="k-textbox" name="title" placeholder="Enter title" data-bind="value:title" required data-required-msg="The title field is required" pattern=".{1,60}" validationMessage="The title may not be greater than 60 characters" style="width: 100%;"/>
+        </div>
+         <div class="col-12">
+          <label for="description">Description</label>
+          <textarea class="k-textbox" name="description" placeholder="Enter description" data-bind="value:description" maxlength="200" style="width: 100%; height: 97px;"></textarea> 
+        </div>
+        <div class="col-12">
+            <label for="status">Status</label>
+            <input id="status" data-bind="value:status"  style="width: 100%;" />
+        </div>
+    </div>
+  </script>  
+
 @endsection
 
 
