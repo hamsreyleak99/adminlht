@@ -15,6 +15,15 @@ class CreateEmployeeTable extends Migration
     {
         Schema::create('employee', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('article_id')->unsigned();
+            $table->string('firstName');
+            $table->string('lastName');
+            $table->string('image',200)->default('default.jpg');
+            $table->string('phone');
+            $table->string('email',200)->unique();
+            $table->string('address');
+            $table->string('detial');
+            $table->enum('status',['Enabled','Disabled'])->default('Enabled');
             $table->timestamps();
         });
     }
