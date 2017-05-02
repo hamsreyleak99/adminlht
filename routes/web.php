@@ -37,7 +37,17 @@ Route::get('/', function () {
     }    
 });
 
+
 Auth::routes();
 
 Route::get('/dashboard', 'DashboardController@index');
 Route::get('/article', 'ArticleController@view');
+
+
+Route::group(['prefix' => '/employee'], function(){
+	Route::get('/', 'EmployeeController@view');
+	Route::get('/get', 'EmployeeController@get');
+	Route::post('/post', 'EmployeeController@store');
+	Route::post('/update', 'EmployeeController@update');
+	Route::post('/destroy', 'EmployeeController@destroy');
+});

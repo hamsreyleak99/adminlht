@@ -26,7 +26,7 @@
 
           <li><a href="{{ url(config('backpack.base.route_prefix').'/menu-item') }}"><i class="fa fa-list"></i> <span>Group Company</span></a></li>
 
-          <li><a href="{{ url(config('backpack.base.route_prefix').'/menu-item') }}"><i class="fa fa-list"></i> <span>Employee</span></a></li>
+          <li><a href="{{ url('').'/employee' }}"><i class="fa fa-list"></i> <span>Employee</span></a></li>
 
           <li><a href="{{ url(config('backpack.base.route_prefix').'/menu-item') }}"><i class="fa fa-list"></i> <span>Post Event</span></a></li>
 

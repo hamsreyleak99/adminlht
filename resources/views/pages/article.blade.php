@@ -40,20 +40,23 @@
                             dataType: "json"
                         },
                         update: {
-                            url: crudServiceBaseUrl + "/Products/Update",
-                            dataType: "jsonp"
+                            url: crudServiceBaseUrl + "/article/update",
+                            type: "POST",
+                            dataType: "json"
                         },
                         destroy: {
-                            url: crudServiceBaseUrl + "/Products/Destroy",
-                            dataType: "jsonp"
+                            url: crudServiceBaseUrl + "/article/destroy",
+                            type: "POST",
+                            dataType: "json"
                         },
                         create: {
-                            url: crudServiceBaseUrl + "/Products/Create",
-                            dataType: "jsonp"
+                            url: crudServiceBaseUrl + "/article/store",
+                            type: "POST",
+                            dataType: "json"
                         },
                         parameterMap: function(options, operation) {
                             if (operation !== "read" && options.models) {
-                                return {models: kendo.stringify(options.models)};
+                                return {article: kendo.stringify(options.models)};
                             }
                         }
                     },
@@ -63,27 +66,35 @@
                         model: {
                             id: "ID",
                             fields: {
-                                ProductID: { editable: false, nullable: true },
-                                ProductName: { validation: { required: true } },
-                                UnitPrice: { type: "number", validation: { required: true, min: 1} },
-                                Discontinued: { type: "boolean" },
-                                UnitsInStock: { type: "number", validation: { min: 0, required: true } }
+                              id: { editable: false, nullable: true },
+                              title: { type: "string" },
+                              description: { type: "string" },
+                              status: { field: "status", type: "string", defaultValue: "Enabled" }
                             }
                         }
                     }
                 });
             $("#grid").kendoGrid({
-                dataSource: dataSource,
-                pageable: true,
+                dataSource: gridDataSource,
+                navigatable: true,
+                resizable: true,
+                reorderable: true,
+                columnMenu: true,
+                filterable: true,
+                sortable: { mode: "single", allowUnsort: false },
+                pageable: { refresh:true, pageSizes: true, buttonCount: 5 },
                 height: 550,
+                toolbar: [ 
+                  { name: "create", text: "Add New Customer" },
+                  { template: kendo.template($("#textbox-multi-search").html()) } 
+                ],
                 toolbar: ["create"],
                 columns: [
-                    { field:"ProductName", title: "Product Name" },
-                    { field: "UnitPrice", title:"Unit Price", format: "{0:c}", width: "120px" },
-                    { field: "UnitsInStock", title:"Units In Stock", width: "120px" },
-                    { field: "Discontinued", width: "120px" },
-                    { command: ["edit", "destroy"], title: "&nbsp;", width: "250px" }],
-                editable: "popup"
+                   { field:"title", title: "Title" },
+                  { field: "description", title: "Description"},
+                   { field: "Discontinued", width: "120px" },
+                   { field: "status", title: "Status", values: statusDataSource, hidden: true },
+                   { command: ["edit", "destroy"], title: "Action", menu: false }
             });
         });
 

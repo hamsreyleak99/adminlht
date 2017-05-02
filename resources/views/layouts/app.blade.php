@@ -114,7 +114,10 @@
     <!-- page script -->
     <script type="text/javascript">
 
-      // var crudBaseUrl = "{{url('')}}";
+      var statusDataSource = [
+        {value: "Enabled", text: "Enabled"},
+        {value: "Disabled", text: "Disabled"}
+      ];
 
         // To make Pace works on Ajax calls
 

@@ -16,14 +16,16 @@ class CreateEmployeeTable extends Migration
         Schema::create('employee', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('article_id')->unsigned();
-            $table->string('firstName');
-            $table->string('lastName');
-            $table->string('image',200)->default('default.jpg');
-            $table->string('phone');
-            $table->string('email',200)->unique();
-            $table->string('address');
-            $table->string('detial');
+            $table->string('firstName', 200);
+            $table->string('lastName', 200);
+            $table->string('image', 200);
+            $table->string('phone')->nullable()->default(null);
+            $table->string('email', 200)->nullable()->default(null);
+            $table->string('address', 200)->nullable()->default(null);
+            $table->string('detial', 200)->nullable()->default(null);
             $table->enum('status',['Enabled','Disabled'])->default('Enabled');
+            $table->integer('created_by')->unsigned()->nullable()->default(null);
+            $table->integer('updated_by')->unsigned()->nullable()->default(null);
             $table->timestamps();
         });
     }
