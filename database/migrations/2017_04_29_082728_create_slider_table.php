@@ -15,6 +15,13 @@ class CreateSliderTable extends Migration
     {
         Schema::create('slider', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('article')->unsigned();
+            $table->string('title',60);
+            $table->string('image',60)->nullable();
+            $table->string('description',200)->nullable()->default(null);
+            $table->enum('status',['Enabled','Disabled'])->default('Enabled');
+            $table->integer('created_by')->unsigned()->nullable()->default(null);
+            $table->integer('updated_by')->unsigned()->nullable()->default(null);
             $table->timestamps();
         });
     }

@@ -13,8 +13,14 @@ class CreateArticleTable extends Migration
      */
     public function up()
     {
+        
         Schema::create('article', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('title',60);
+            $table->string('description',200)->nullable()->default(null);
+            $table->enum('status',['Enabled','Disabled'])->default('Enabled');
+            $table->integer('created_by')->unsigned()->nullable()->default(null);
+            $table->integer('updated_by')->unsigned()->nullable()->default(null);
             $table->timestamps();
         });
     }

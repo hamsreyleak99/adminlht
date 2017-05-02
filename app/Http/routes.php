@@ -11,6 +11,18 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+// Route::get('/', function () {
+// 	if (Auth::check()) 
+//     {
+//     	return redirect('/dashboard');
+//     }else{
+//     	return redirect('/login');
+//     }    
+// });
+
+// Auth::routes();
+
+// Route::get('/dashboard', 'DashboardController@index');
