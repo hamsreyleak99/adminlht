@@ -31,12 +31,13 @@
 @section('after_scripts') 
     <script>
         $(document).ready(function () {
-            var crudServiceBaseUrl = "https://demos.telerik.com/kendo-ui/service",
+            var crudServiceBaseUrl = "{{ url('') }}",
                 dataSource = new kendo.data.DataSource({
                     transport: {
                         read:  {
-                            url: crudServiceBaseUrl + "/Products",
-                            dataType: "jsonp"
+                            url: crudServiceBaseUrl + "/article/get",
+                            type: "GET",
+                            dataType: "json"
                         },
                         update: {
                             url: crudServiceBaseUrl + "/Products/Update",
@@ -85,6 +86,7 @@
                 editable: "popup"
             });
         });
+
     </script>
 @endsection
 
