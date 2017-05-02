@@ -11,22 +11,6 @@
 |
 */
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
-
-// Auth::routes();
-
-// Route::get('/home', 'HomeController@index');
-// Route::get('/article', 'ArticleController@view');
-// //Route customer
-// Route::group(['prefix' => '/article'], function () {
-//     // Route::get('/', 'CustomerController@view');
-//     // Route::get('/get', 'CustomerController@get');
-//     // Route::post('/store', 'CustomerController@store');
-//     // Route::post('/update', 'CustomerController@update');
-//     // Route::post('/destroy', 'CustomerController@destroy');
-// });
 
 Route::get('/', function () {
 	if (Auth::check()) 
@@ -41,6 +25,15 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/dashboard', 'DashboardController@index');
+
+//Route article
+Route::group(['prefix' => '/article'], function () {
+    Route::get('/', 'ArticleController@view');
+    Route::get('/get', 'ArticleController@get');
+    Route::post('/store', 'ArticleController@store');
+    Route::post('/update', 'ArticleController@update');
+    Route::post('/destroy', 'ArticleController@destroy');
+});
 Route::get('/article', 'ArticleController@view');
 
 

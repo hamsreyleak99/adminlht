@@ -37,6 +37,66 @@
      <link rel="stylesheet" href="{{ asset('vendor/adminlte/') }}/bootstrap/css/kendo.bootstrap.mobile.min.css">
     <!-- BackPack Base CSS -->
     <link rel="stylesheet" href="{{ asset('vendor/backpack/backpack.base.css') }}">
+     <!-- Global css use in this application -->
+    <style type="text/css">
+
+      .toolbar-search {
+        float: right;
+        margin-right: 12px;
+      }
+      .text-box-search{
+        width: 220px;
+      }    
+      /*Column grid*/
+      .row-12{
+        float: left;
+        width: 99%;
+        padding-right: 1%;
+      }
+      .row-6{
+        float: left;
+        width: 50%;
+      }
+      .col-12{
+        float: left;
+        width: 96%;
+        padding: 0% 2% 2% 2%;
+      }
+      .col-6{
+        float: left;
+        width: 47%;
+        padding: 0% 2% 2% 1%;
+      }
+      .row-1-12{
+        float: left;
+        width: 99%;
+        padding-right: 1%;
+      }
+      .col-1-12{
+        float: left;
+        width: 98%;
+        padding: 0% 1% 2% 1%;
+      }
+      .col-1-6{
+        float: left;
+        width: 48%;
+        padding: 0% 1% 2% 1%;
+      }
+      input.k-textbox{
+        text-indent: .5em;
+      }
+      .k-edit-form-container{
+        width: 100%; 
+      }
+      .k-input{
+        padding: 0px;
+      }
+      .k-multiselect-wrap{
+        padding-top: 1px;
+        padding-bottom: 1px;
+        min-height: 2.15em;
+      }
+    </style>
     @yield('after_styles')
     
 </head>
@@ -119,6 +179,12 @@
         {value: "Disabled", text: "Disabled"}
       ];
 
+      /*It's status data*/
+      var statusDataSource = [
+        {value: "Enabled", text: "Enabled"},
+        {value: "Disabled", text: "Disabled"}
+      ];
+
         // To make Pace works on Ajax calls
 
         $(document).ajaxStart(function() { Pace.restart(); });
@@ -130,17 +196,30 @@
                 }
             });
 
-        // Set active state on menu element
-        var current_url = "{{ url(Route::current()->getUri()) }}";
+        /*Set active state on menu element*/
+        var current_url = window.location.href;
+        
         $("ul.sidebar-menu li a").each(function() {
-          if ($(this).attr('href').startsWith(current_url) || current_url.startsWith($(this).attr('href')))
+          if ($(this).attr('href') === current_url || current_url === $(this).attr('href'))
           {
             $(this).parents('li').addClass('active');
           }
         });
+
+        /*Initialize status dropdownlist*/ 
+      function initStatusDropDownList()
+      {
+        $("#status").kendoDropDownList({
+          dataValueField: "value",
+          dataTextField: "text",
+          dataSource: statusDataSource  
+        });
+      }
+      
     </script>
 
-   {{--  @include('inc.alerts') --}}
+
+    @include('inc.alerts')
 
     @yield('after_scripts')
       
