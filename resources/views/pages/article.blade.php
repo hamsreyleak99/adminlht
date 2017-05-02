@@ -64,7 +64,7 @@
                     pageSize: 20,
                     schema: {
                         model: {
-                            id: "ID",
+                            id: "id",
                             fields: {
                                 id: { editable: false, nullable: true },
                                 title: { type: "string" },

@@ -96,7 +96,7 @@ class ArticleController extends Controller
 				$articleObject->title 				= 	$articleRequest->title;
 				$articleObject->description 		= 	$articleRequest->description;
 				$articleObject->status          	=   $articleRequest->status;
-				$articleObject->updated_by     	=   auth::id();
+				$articleObject->updated_by      	=   auth::id();
 
 				$articleObject->save();
 
