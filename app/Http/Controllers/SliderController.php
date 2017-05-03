@@ -32,6 +32,10 @@ class SliderController extends Controller
     public function view()
     {
         $this->data['title'] = 'Slider';
+
+         $articlecontroller 		= 	new ArticleController;
+		$this->data['article'] 	= 	$articlecontroller->getList('all')->content();
+		
         return view('pages.slider',$this->data);
     }
     /**

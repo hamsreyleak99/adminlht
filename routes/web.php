@@ -24,7 +24,6 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/dashboard', 'DashboardController@index');
-
 //Route article
 Route::group(['prefix' => '/article'], function () {
     Route::get('/', 'ArticleController@view');

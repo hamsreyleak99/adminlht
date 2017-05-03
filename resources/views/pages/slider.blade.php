@@ -30,6 +30,10 @@
 @endsection
 @section('after_scripts') 
     <script>
+      /*Category data source*/
+      var articleDataSource  =   <?php echo json_encode($article) ?>;
+      articleDataSource      =   JSON.parse(articleDataSource);
+
         $(document).ready(function () {
             // var crudServiceBaseUrl = "{{ url(' ') }}",
                 dataSource = new kendo.data.DataSource({
@@ -67,7 +71,9 @@
                             id: "id",
                             fields: {
                                 id: { editable: false, nullable: true },
-                                title: { type: "string" },
+                                article_id: { type: "string" },
+                                image: { type: "string",nullable: true },
+                                name: { type: "string",nullable: true },
                                 description: { type: "string",nullable: true },
                                 status: { field: "status", type: "string", defaultValue: "Enabled" }
                             }
@@ -89,7 +95,9 @@
                     { name: "create", text: "Add New Slider" }
                 ],
                 columns: [
-                    { field:"title", title: "Title" },
+                    { field:"article_id", title: "Type", values: categoryDataSource },
+                    { field: "image", title:"Image" },
+                    { field: "name", title:"Name" },
                     { field: "description", title:"Description" },
                     { field: "status", title: "Status", values: statusDataSource },
                     { command: ["edit", "destroy"], title: "Action", menu: false }
@@ -112,6 +120,21 @@
             });
         });
          function initFormControl(){
+          /*Initialize article type dropdownlist*/
+          $("#type").kendoDropDownList({
+            optionLabel: "Select Article type...",
+            dataValueField: "value",
+            dataTextField: "text",
+            dataSource: {
+              transport: {
+                read: {
+                  url: crudBaseUrl + "/article/list/filter",
+                  type: "GET",
+                  dataType: "json"
+                }
+              }
+            }
+          });
 
          /*Initailize status dropdownlist*/
          initStatusDropDownList();

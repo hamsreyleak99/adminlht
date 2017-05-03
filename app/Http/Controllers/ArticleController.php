@@ -32,6 +32,7 @@ class ArticleController extends Controller
     public function view()
     {
         $this->data['title'] = 'Article';
+
         return view('pages.article',$this->data);
     }
     /**
