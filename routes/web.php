@@ -25,22 +25,20 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/dashboard', 'DashboardController@index');
-
 //Route article
 Route::group(['prefix' => '/article'], function () {
     Route::get('/', 'ArticleController@view');
     Route::get('/get', 'ArticleController@get');
+    Route::get('/list/{option}', 'ArticleController@getList');
     Route::post('/store', 'ArticleController@store');
     Route::post('/update', 'ArticleController@update');
     Route::post('/destroy', 'ArticleController@destroy');
 });
-Route::get('/article', 'ArticleController@view');
-
-// Route emplotee
-Route::group(['prefix' => '/employee'], function(){
-	Route::get('/', 'EmployeeController@view');
-	Route::get('/get', 'EmployeeController@get');
-	Route::post('/store', 'EmployeeController@store');
-	Route::post('/update', 'EmployeeController@update');
-	Route::post('/destroy', 'EmployeeController@destroy');
+//Route slider
+Route::group(['prefix' => '/slider'], function () {
+    Route::get('/', 'SliderController@view');
+    Route::get('/get', 'SliderController@get');
+    Route::post('/store', 'SliderController@store');
+    Route::post('/update', 'SliderController@update');
+    Route::post('/destroy', 'SliderController@destroy');
 });
