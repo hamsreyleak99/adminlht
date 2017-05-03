@@ -13,14 +13,14 @@ class CreateEmployeeTable extends Migration
      */
     public function up()
     {
-        Schema::create('employee', function (Blueprint $table) {
+        Schema::create('employees', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('article_id')->unsigned();
-            $table->string('firstName', 200);
-            $table->string('lastName', 200);
-            $table->string('image', 200);
-            $table->string('phone')->nullable()->default(null);
-            $table->string('email', 200)->nullable()->default(null);
+            $table->string('firstName', 60);
+            $table->string('lastName', 60);
+            $table->string('image', 60);
+            $table->string('phone',60)->nullable()->default(null);
+            $table->string('email', 60)->nullable()->default(null);
             $table->string('address', 200)->nullable()->default(null);
             $table->string('detial', 200)->nullable()->default(null);
             $table->enum('status',['Enabled','Disabled'])->default('Enabled');

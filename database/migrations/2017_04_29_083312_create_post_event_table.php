@@ -15,9 +15,9 @@ class CreatePostEventTable extends Migration
     {
         Schema::create('post_event', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('title');
+            $table->string('title',200);
             $table->string('image',200)->default('default.jpg');
-            $table->string('description');
+            $table->string('description',255)->nullable()->default(null);
             $table->enum('status',['Enabled','Disabled'])->default('Enabled');
             $table->timestamps();
         });

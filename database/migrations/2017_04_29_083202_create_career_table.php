@@ -17,9 +17,9 @@ class CreateCareerTable extends Migration
             $table->increments('id');
             $table->integer('article_id')->unsigned();
             $table->string('image',200)->default('default.jpg');
-            $table->string('job_title');
-            $table->string('job_description');
-            $table->string('job_requirement');
+            $table->string('job_title',200);
+            $table->string('job_description',255)->nullable()->default(null);
+            $table->string('job_requirement',255)->nullable()->default(null);
             $table->date('post_date')->nullable()->default(null);
             $table->date('close_date')->nullable()->default(null);
             $table->timestamps();

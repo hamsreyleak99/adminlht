@@ -173,12 +173,8 @@
 
     <!-- page script -->
     <script type="text/javascript">
-
-      var statusDataSource = [
-        {value: "Enabled", text: "Enabled"},
-        {value: "Disabled", text: "Disabled"}
-      ];
-
+    
+      var crudBaseUrl = "{{url('')}}";
       /*It's status data*/
       var statusDataSource = [
         {value: "Enabled", text: "Enabled"},
@@ -214,6 +210,28 @@
           dataTextField: "text",
           dataSource: statusDataSource  
         });
+      }
+
+      /*
+        Initialize article dropdownlist
+       */
+      function initialArticleDropDownList() {
+        $("#article").kendoDropDownList({
+          valuePrimitive: true,
+          filter: "startswith",
+          optionLabel: "Select article...",
+          dataTextField: "title",
+          dataValueField: "id",
+          dataSource: {
+            transport: {
+              read: {
+                url: crudBaseUrl + "/article/get",
+                type: "GET",
+                dataType: "json"
+              }
+            }
+          }
+        }).data("kendoDropDownList");
       }
       
     </script>

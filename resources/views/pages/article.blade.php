@@ -75,7 +75,7 @@
                     }
                 });
             $("#grid").kendoGrid({
-                dataSource: gridDataSource,
+                dataSource: dataSource,
                 navigatable: true,
                 resizable: true,
                 reorderable: true,
