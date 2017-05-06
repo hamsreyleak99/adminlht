@@ -41,4 +41,5 @@ Route::group(['prefix' => '/slider'], function () {
     Route::post('/store', 'SliderController@store');
     Route::post('/update', 'SliderController@update');
     Route::post('/destroy', 'SliderController@destroy');
+    Route::post('/upload', 'SliderController@upload');
 });

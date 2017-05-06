@@ -34,8 +34,8 @@ class SliderController extends Controller
         $this->data['title'] = 'Slider';
 
          $articlecontroller 		= 	new ArticleController;
-		$this->data['article'] 	= 	$articlecontroller->getList('all')->content();
-		
+		$this->data['articles'] 	= 	$articlecontroller->getList('all')->content();
+
         return view('pages.slider',$this->data);
     }
     /**
@@ -64,7 +64,9 @@ class SliderController extends Controller
 
 				$sliderObject = new Slider();
 
-				$sliderObject->title 			= 	$sliderRequest->title;
+				$sliderObject->article_id 		= 	$sliderRequest->article_id;
+				$sliderObject->name 			= 	$sliderRequest->name;
+				$sliderObject->image 			= 	$sliderRequest->image;
 				$sliderObject->description 		= 	$sliderRequest->description;
 				$sliderObject->status          	=   $sliderRequest->status;
 				$sliderObject->created_by      	=   auth::id();
@@ -97,7 +99,9 @@ class SliderController extends Controller
 
 				$sliderObject = slider::findOrFail($sliderRequest->id);
 				
-				$sliderObject->title 				= 	$sliderRequest->title;
+				$sliderObject->article_id 		= 	$sliderRequest->article_id;
+				$sliderObject->name 			= 	$sliderRequest->name;
+				$sliderObject->image 			= 	$sliderRequest->image;
 				$sliderObject->description 		= 	$sliderRequest->description;
 				$sliderObject->status          	=   $sliderRequest->status;
 				$sliderObject->updated_by      	=   auth::id();
@@ -125,6 +129,7 @@ class SliderController extends Controller
 		$slidersRequest = json_decode($request->input('slider'));
 
 		foreach ($slidersRequest as $key => $sliderRequest) {
+
 			try {
 
 				$sliderObject = Slider::findOrFail($sliderRequest->id);
@@ -133,12 +138,10 @@ class SliderController extends Controller
 
 				$slidersResponse[] = $sliderRequest;
 
-					
 			} catch (Exception $e) {
 					
 			}
 		}
-
 		return Response()->Json($slidersResponse);
 	}
 }

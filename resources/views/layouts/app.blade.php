@@ -220,7 +220,7 @@
           valuePrimitive: true,
           filter: "startswith",
           optionLabel: "Select article...",
-          dataTextField: "title",
+          dataTextField: "name",
           dataValueField: "id",
           dataSource: {
             transport: {
