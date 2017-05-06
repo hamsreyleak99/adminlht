@@ -7,7 +7,8 @@
 
     {{-- Encrypted CSRF token for Laravel, in order for Ajax requests to work --}}
     <meta name="csrf-token" content="{{ csrf_token() }}" />
-
+    
+    <base href="https://demos.telerik.com/kendo-ui/upload/async">
      <title>{{ isset($title) ? $title.' :: '.config('app.name') : config('app.name')}}</title>
 
     @yield('before_styles')
@@ -162,6 +163,8 @@
 
      <!-- jQuery -->
     <script src="{{ asset('vendor/adminlte') }}/bootstrap/js/jquery.min.js"></script>
+    {{-- javascript --}}
+    <script type="{{ asset('vendor/adminlte') }}/bootstrap-filestyle.min.js"> </script>
     <!-- Bootstrap -->
     <script src="{{ asset('vendor/adminlte') }}/bootstrap/js/jszip.min.js"></script>
     <script src="{{ asset('vendor/adminlte') }}/bootstrap/js/kendo.all.min.js"></script>
@@ -181,6 +184,11 @@
         {value: "Disabled", text: "Disabled"}
       ];
 
+      //It's gender data
+      var genderDataSource = [
+        {value: "Male", text: "Male"},
+        {value: "Female", text: "Female"}
+      ];
         // To make Pace works on Ajax calls
 
         $(document).ajaxStart(function() { Pace.restart(); });
@@ -209,6 +217,16 @@
           dataValueField: "value",
           dataTextField: "text",
           dataSource: statusDataSource  
+        });
+      }
+
+      /*Initialize gender dropdownlist*/ 
+      function initGenderDropDownList()
+      {
+        $("#gender").kendoDropDownList({
+          dataValueField: "value",
+          dataTextField: "text",
+          dataSource: genderDataSource  
         });
       }
 

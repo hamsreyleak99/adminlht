@@ -15,10 +15,10 @@ class CreateEmployeeTable extends Migration
     {
         Schema::create('employees', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('article_id')->unsigned();
             $table->string('firstName', 60);
             $table->string('lastName', 60);
-            $table->string('image', 60);
+            $table->enum('gender',['Male','Female']);
+            $table->string('image', 255)->nullable()->default(null);
             $table->string('phone',60)->nullable()->default(null);
             $table->string('email', 60)->nullable()->default(null);
             $table->string('address', 200)->nullable()->default(null);
