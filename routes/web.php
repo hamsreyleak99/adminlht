@@ -43,3 +43,13 @@ Route::group(['prefix' => '/slider'], function () {
     Route::post('/destroy', 'SliderController@destroy');
     Route::post('/upload', 'SliderController@upload');
 });
+// Route employee
+
+Route::group(['prefix' => '/employee'], function () {
+    Route::get('/', 'EmployeeController@view');
+    Route::get('/{employee_id?}', 'EmployeeController@get');
+    Route::post('/', 'EmployeeController@store');
+    Route::post('/{employee_id?}', 'EmployeeController@update');
+    Route::delete('/{employee_id?}', 'EmployeeController@destroy');
+    
+});

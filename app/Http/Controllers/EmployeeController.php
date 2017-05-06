@@ -3,27 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Employee;
-use App\Http\Controllers\ArticleController;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Validator;
+use Image;
+
 class EmployeeController extends Controller
 {
-    /**
-     *The information we send to the view
-     *@var array
-     */
-        protected $data = []; 
-        
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
     /**
      * Display a listing of the resource.
      *
@@ -31,26 +19,21 @@ class EmployeeController extends Controller
      */
     public function view()
     {
-        $this->data['title']            =   'Employee List';
-
-        $articleController              =   new ArticleController;
-        $this->data['articles']         =   $articleController->get()->content();
-
-        return view('pages.employee', $this->data);
+        // $datas = Employee::all();
+        $datas = Employee::all()->sortByDesc('id')->values()->all();//have number
+        // $datas = Employee::simplePaginate(5);//no number
+        return view('pages.employees.employee', array('datas' => $datas ));
     }
 
     /**
-     * Get a listing of the resource.
+     * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function get()
+    public function create()
     {
-        $employees = Employee::all()->sortByDesc('id')->values()->all();
-
-        return Response()->Json($employees);
+        //
     }
-
 
     /**
      * Store a newly created resource in storage.
@@ -60,99 +43,120 @@ class EmployeeController extends Controller
      */
     public function store(Request $request)
     {
-        $employeesRequest = json_decode($request->input('employee'));
+        /*
+            validation image;
+         */
+        $validator = Validator::make($request->all(), [
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
 
-        foreach ($employeesRequest as $key => $employeeRequest) {
-            try {
+        $employee = new Employee();
 
-                $employeeObject = new Employee();
+        $employee->firstName = $request->firstName;
+        $employee->lastName = $request->lastName;
+        $employee->gender = $request->gender;
 
-                $employeeObject->article_id         =   $employeeRequest->article_id;
-                $employeeObject->firstName          =   $employeeRequest->firstName;
-                $employeeObject->lastName           =   $employeeRequest->lastName;
-                // $employeeObject->image              =   $employeeRequest->image;
-                $employeeObject->phone              =   $employeeRequest->phone;
-                $employeeObject->email              =   $employeeRequest->email;
-                $employeeObject->address            =   $employeeRequest->address;
-                $employeeObject->detial             =   $employeeRequest->detial;
-                $employeeObject->status             =   $employeeRequest->status;
-                $employeeObject->created_by         =   auth::id();
-                $employeeObject->updated_by         =   auth::id();
+        if($request->hasFile('image')){
+            if($validator->passes()){
+                $image = $request->file('image');
+                $filename = time() . '.' . $image->getClientOriginalExtension();
+                Image::make($image)->resize(300, 300)->save( public_path('/uploads/images/' . $filename ) );
 
-                $employeeObject->save();
-
-                $employeesResponse[] = $employeeObject;
-
-            } catch (Exception $e) {
-                    
+                $employee->image = $filename;
+            }else{
+                return Response()->json(['error'=>$validator->errors()->all()]);
             }
         }
 
-        return Response()->Json($employeesResponse);
+        $employee->phone = $request->phone;
+        $employee->email = $request->email;
+        $employee->address = $request->address;
+        $employee->detial = $request->detial;
+        $employee->status = $request->status;
+        $employee->created_by = auth::id();
+        $employee->updated_by = auth::id();
+        $employee->save();
+        // return Response()->json($employee); 
+        return redirect('/employee'); 
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function get($employee_id)
+    {
+        $employee = Employee::find($employee_id);
+        return Response()->json($employee);  
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request)
+    public function update(Request $request, $employee_id)
     {
-        $employeesRequest = json_decode($request->input('employee'));
+        
+        $validator = Validator::make($request->all(), [
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+          ]);
 
-        foreach ($employeesRequest as $key => $employeeRequest) {
-            try {
+        $employee = Employee::find($employee_id);
+        $employee->firstName = $request->firstName;
+        $employee->lastName = $request->lastName;
+        $employee->gender = $request->gender;
 
-                $employeeObject = Employee::findOrFail($employeeRequest->id);
+        if($request->hasFile('image')){
+            if($validator->passes()){
+                $image = $request->file('image');
+                $filename = time() . '.' . $image->getClientOriginalExtension();
+                Image::make($image)->resize(300, 300)->save( public_path('/uploads/images/' . $filename ) );
 
-                $employeeObject->article_id         =   $employeeRequest->article_id;
-                $employeeObject->firstName          =   $employeeRequest->firstName;
-                $employeeObject->lastName           =   $employeeRequest->lastName;
-                // $employeeObject->image              =   $employeeRequest->image;
-                $employeeObject->phone              =   $employeeRequest->phone;
-                $employeeObject->email              =   $employeeRequest->email;
-                $employeeObject->address            =   $employeeRequest->address;
-                $employeeObject->detial             =   $employeeRequest->detial;
-                $employeeObject->status             =   $employeeRequest->status;
-                $employeeObject->created_by         =   auth::id();
-
-                $employeeObject->save();
-
-                $employeesResponse[] = $employeeObject;
-                    
-            } catch (Exception $e) {
-                    
+                $employee->image = $filename;
+            }else{
+                return Response()->json(['error'=>$validator->errors()->all()]);
             }
         }
 
-        return Response()->Json($employeesResponse);
+        $employee->phone = $request->phone;
+        $employee->email = $request->email;
+        $employee->address = $request->address;
+        $employee->detial = $request->detial;
+        $employee->status = $request->status;
+        $employee->updated_by = auth::id();
+        $employee->save();
+        return redirect('/employee'); 
+
+
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request)
+    public function destroy($employee_id)
     {
-        $employeesRequest = json_decode($request->input('employee'));
 
-        foreach ($employeesRequest as $key => $employeeRequest) {
-            try {
+        $employee = Employee::destroy($employee_id);
+        return response()->json($employee);
 
-                $employeeObject = Employee::findOrFail($employeeRequest->id);
-
-                $employeeObject->delete();
-
-                $employeesResponse[] = $employeeRequest;
-                    
-            } catch (Exception $e) {
-                    
-            }
-        }
-
-        return Response()->Json($employeesResponse);
     }
 }

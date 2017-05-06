@@ -204,8 +204,9 @@ return [
         Backpack\PermissionManager\PermissionManagerServiceProvider::class,
 
         /*
-        * Other Service Providers...
+        * image Service Providers...
         */
+       Intervention\Image\ImageServiceProvider::class,
 
     ],
 
@@ -262,8 +263,9 @@ return [
         'Html'  => Collective\Html\HtmlFacade::class,
 
        /*
-        * Other Aliases...
+        * images Aliases...
         */
+       'Image' => Intervention\Image\Facades\Image::class,
 
     ],
 
