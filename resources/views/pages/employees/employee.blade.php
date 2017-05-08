@@ -23,7 +23,7 @@
 
 					{{-- add button --}}
 					<button class="btn btn-primary pull-left" id="add-new" name="add-new">
-						<span class="glyphicon glyphicon-plus"></span>Add New Student
+						<span class="glyphicon glyphicon-plus"></span>Add New Employee
 					</button>
 
 					{{-- ===========include modal========== --}}
@@ -88,8 +88,8 @@
 @section('after_scripts')
 
 <script type="text/javascript">
-	initStatusDropDownList();
-	initGenderDropDownList();
+	// initStatusDropDownList();
+	// initGenderDropDownList();
 	
 	$.ajaxSetup({
 		headers: {

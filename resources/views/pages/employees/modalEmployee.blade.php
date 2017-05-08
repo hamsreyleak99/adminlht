@@ -1,10 +1,24 @@
+@section('after_styles')
+	<!-- Inline CSS based on choices in "Settings" tab -->
+<style>
+	.bootstrap-iso .formden_header h2, 
+	.bootstrap-iso .formden_header p, 
+	.bootstrap-iso form{font-family: Arial, Helvetica, sans-serif; 
+		color: black}.bootstrap-iso form button, 
+					.bootstrap-iso form button:hover{color: white !important;} 
+					.asteriskField{color: red;}
+</style>
+
+@stop
+
+
 {{-- modal --}}
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-				<h4 class="modal-title" id="myModalLabel">Employee</h4>
+				<h2 class="modal-title" id="myModalLabel" style="color: blue;">Add New Employee</h2>
 			</div>
 			<div class="modal-body">
 				<form method="POST" 
@@ -13,42 +27,99 @@
 					enctype="multipart/form-data"
 					action="{{ url(''). "/employee" }}">
 					{{ csrf_field() }}
-					<div class="row">
-						<div class="col-12">
-							<div class="form-group error">
-								
-				            <label for="firstName">First Name</label>
-				            <input type="text" class="k-textbox" id="firstName" name="firstName" placeholder="Enter city" data-bind="value:firstName" pattern=".{0,30}" validationMessage="The postal code may not be greater than 30 characters" style="width: 100%;"/>
-						        
-							<label for="lastName">Last Name</label>
-				            <input type="text" class="k-textbox" id="lastName" name="lastName" placeholder="Enter city" data-bind="value:lastName" pattern=".{0,30}" validationMessage="The postal code may not be greater than 30 characters" style="width: 100%;"/>
-
-							<label for="gender">Gender</label>
-          					<input id="gender" name="gender" data-bind="value:gender" required data-required-msg="The gender field is required" style="width: 100%;" />
-							
-					        <label for="image">Image</label>
-							<input type="file" class="form-control" name="image" id="image" style="border-radius: 5px">
-
-							<label for="phone">Phone</label>
-								<input type="tel" class="k-textbox" id="phone" name="phone" data-bind="value:phone" required data-required-msg="The phone field is required"  placeholder="Enter phone number" validationMessage="Phone number format is not valid" style="width: 100%;"/>
-
-							<label for="email">Email</label>
-								<input type="email" class="k-textbox" id="email" name="email" placeholder="e.g. myname@example.net" data-bind="value:email" data-email-msg="Email format is not valid" pattern=".{0,60}" validationMessage="The email may not be greater than 60 characters" style="width: 100%;"/>
-
-							<label for="address">Address</label>
-							<textarea class="k-textbox" name="address" id="address" placeholder="Enter address" data-bind="value:address" maxlength="200" style="width: 100%; height: 97px;"/></textarea> 
-
-							<label for="detial">Detial</label>
-								<textarea class="k-textbox" name="detial" id="detial" placeholder="Enter detial" data-bind="value:detial" maxlength="200" style="width: 100%; height: 97px;"/></textarea> 
-
-							<label for="status">Status</label>
-          					<input id="status" name="status" data-bind="value:status" required data-required-msg="The status field is required" style="width: 100%;" />
-
-						    <hr/>
-							<div class="form-group">
-								<button type="submit" class="btn btn-primary save" id="btn-add" value="add">Save</button>
-								<input type="hidden" id="employee_id" name="employee_id" value="0">
-							</div>
+					<!-- HTML Form (wrapped in a .bootstrap-iso div) -->
+					<div class="bootstrap-iso">
+						<div class="container-fluid">
+							<div class="row">
+								<div class="col-md-12 col-sm-12 col-xs-12">
+									<form method="post">
+										<div class="form-group ">
+											<label class="control-label requiredField" for="firstName">
+												First Name
+												<span class="asteriskField">
+													*
+												</span>
+											</label>
+											<input class="form-control" id="firstName" name="firstName" type="text"/>
+										</div>
+										<div class="form-group ">
+											<label class="control-label requiredField" for="lastName">
+												Last Name
+												<span class="asteriskField">
+													*
+												</span>
+											</label>
+											<input class="form-control" id="lastName" name="lastName" type="text"/>
+										</div>
+										<div class="form-group">
+											<label class="control-label" for="image">Image</label>
+											<input class="form-control" type="file" name="image" id="image">
+										</div>
+										<div class="form-group ">
+											<label class="control-label requiredField" for="gender">
+												Gender
+												<span class="asteriskField">
+													*
+												</span>
+											</label>
+											<select class="select form-control" id="gender" name="gender">
+												<option selected="selected" value="">
+												</option>
+												<option value="Male">
+													Male
+												</option>
+												<option value="Female">
+													Female
+												</option>
+											</select>
+										</div>
+										<div class="form-group ">
+											<label class="control-label " for="phone">
+												Telephone #
+											</label>
+											<input class="form-control" id="phone" name="phone" type="text"/>
+										</div>
+										<div class="form-group ">
+											<label class="control-label " for="email">
+												Email
+											</label>
+											<input class="form-control" id="email" name="email" type="text"/>
+										</div>
+										<div class="form-group ">
+											<label class="control-label " for="address">
+												Address
+											</label>
+											<textarea class="form-control" cols="40" id="address" name="address" rows="5"></textarea>
+										</div>
+										<div class="form-group ">
+											<label class="control-label requiredField" for="detial">
+												Description
+												<span class="asteriskField">
+													*
+												</span>
+											</label>
+											<textarea class="form-control" cols="40" id="detial" name="detial" rows="5"></textarea>
+										</div>
+										<div class="form-group ">
+											<label class="control-label " for="status">
+												Status
+											</label>
+											<select class="select form-control" id="status" name="status">
+												<option value="Enabled">
+													Enabled
+												</option>
+												<option value="Disabled">
+													Disabled
+												</option>
+											</select>
+										</div>
+										<div class="form-group">
+											<div>
+												<button type="submit" class="btn btn-primary save" id="btn-add" value="add">Submit</button>
+											</div>
+										</div>
+									</form>
+								</div>
 							</div>
 						</div>
 					</div>
