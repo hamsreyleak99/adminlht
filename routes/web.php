@@ -54,4 +54,5 @@ Route::group(['prefix' => '/employee'], function () {
 // Route career
 Route::group(['prefix' => '/career'], function(){
     Route::get('/', 'CareerController@view');   
+    Route::post('/', 'CareerController@store');
 });
