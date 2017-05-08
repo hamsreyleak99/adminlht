@@ -49,6 +49,9 @@ Route::group(['prefix' => '/employee'], function () {
     Route::get('/{employee_id?}', 'EmployeeController@get');
     Route::post('/', 'EmployeeController@store');
     Route::post('/{employee_id?}', 'EmployeeController@update');
-    Route::delete('/{employee_id?}', 'EmployeeController@destroy');
-    
+    Route::delete('/{employee_id?}', 'EmployeeController@destroy'); 
+});
+// Route career
+Route::group(['prefix' => '/career'], function(){
+    Route::get('/', 'CareerController@view');   
 });
