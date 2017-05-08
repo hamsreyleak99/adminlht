@@ -42,12 +42,10 @@
 
 				</div>
 			</div>
-
 			<div class="box-body">
 				<table class="table table-bordered">
 					<thead>
-						<tr>
-							
+						<tr>							
 							<th class="text-center">First Name</th>
 							<th class="text-center">Last Name</th>
 							<th class="text-center">Gender</th>
@@ -60,7 +58,6 @@
 					<tbody id="employee-table" name="employee-table">
 						@foreach($datas as $row)
 						<tr id="employee{{$row->id}}">
-							
 							<td class="text-center">{{$row->firstName}}</td>
 							<td class="text-center">{{$row->lastName}}</td>
 							<td class="text-center">{{$row->gender}}</td>
@@ -93,6 +90,7 @@
 <script type="text/javascript">
 	initStatusDropDownList();
 	initGenderDropDownList();
+	
 	$.ajaxSetup({
 		headers: {
 			'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
