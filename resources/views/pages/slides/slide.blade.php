@@ -2,14 +2,23 @@
 
 @section('after_styles')
 
+	<style>
+	    .bootstrap-iso .formden_header h2, 
+	    .bootstrap-iso .formden_header p, 
+	    .bootstrap-iso form{font-family: Arial, Helvetica, sans-serif; 
+	      color: black}.bootstrap-iso form button, 
+	    .bootstrap-iso form button:hover{color: white !important;} 
+	    .asteriskField{color: red;}
+  	</style>
+
 @endsection
 
 @section('header')
 <section class="content-header">
-	<h1>Employee</h1>
+	<h1>Setup Slide</h1>
 	<ol class="breadcrumb">
 		<li class="active">{{ config('app.name') }}</li>
-		<li class="active">Employee</li>
+		<li class="active">Setup Slide</li>
 	</ol>
 </section>
 @endsection
@@ -22,10 +31,10 @@
 				<div class="box-title">
 					{{-- add button --}}
 					<button class="btn btn-primary pull-left" id="add-new" name="add-new">
-						<span class="glyphicon glyphicon-plus"></span>Add New Employee
+						<span class="glyphicon glyphicon-plus"></span>Add New Slide
 					</button>
 					{{-- ===========include modal========== --}}
-					@include('pages.employees.modalEmployee')
+					@include('pages.slides.modalslide')
 
 					<div class="title-left">
 						<div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
@@ -44,29 +53,27 @@
 				<table class="table table-bordered">
 					<thead>
 						<tr>							
-							<th class="text-center">First Name</th>
-							<th class="text-center">Last Name</th>
-							<th class="text-center">Gender</th>
+							<th class="text-center">Article</th>
+							<th class="text-center">Name</th>
 							<th class="text-center">image</th>
-							<th class="text-center">email</th>
+							<th class="text-center">description</th>
 							<th class="text-center">status</th>
 							<th class="text-center">Action</th>
 						</tr>
 					</thead>
-					<tbody id="employee-table" name="employee-table">
+					<tbody id="slide-table" name="slide-table">
 						@foreach($datas as $row)
-						<tr id="employee{{$row->id}}">
-							<td class="text-center">{{$row->firstName}}</td>
-							<td class="text-center">{{$row->lastName}}</td>
-							<td class="text-center">{{$row->gender}}</td>
-							<td class="text-center">{{$row->image}}</td>
-							<td class="text-center">{{$row->email}}</td>
+						<tr id="slide{{$row->id}}">
+							<td class="text-center">{{$row->article_id}}</td>
+							<td class="text-center">{{$row->name}}</td>
+							<td class="text-center"><img src="{{url("/uploads/images/",$row->image)}}" style="height: 120; width: 120px;"></td>
+							<td class="text-center">{{$row->description}}</td>
 							<td class="text-center">{{$row->status}}</td>
 							<td class="text-center">
 								<button class="edit_data btn btn-info open-modal" id="edit-modal" value="{{$row->id}}">
 									<span class="glyphicon glyphicon-edit">edit</span>
 								</button>
-								<button class="btn btn-danger delete-employee" value="{{$row->id}}">
+								<button class="btn btn-danger delete-slide" value="{{$row->id}}">
 									<span class="glyphicon glyphicon-trash">delete</span>
 								</button>
 							</td>
@@ -94,14 +101,14 @@
 			'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
 		}
 	})
-	var url ="{{ url(''). "/employee"}}";
+	var url ="{{ url(''). "/slide"}}";
 	// display modal
 	$('#add-new').click(function(){
 		$('.save').text("Save");
-		$("#frmEmployee").attr('method', 'POST');
-        $("#frmEmployee").attr('action', "{{ url(''). "/employee" }}" );
+		$("#frmslide").attr('method', 'POST');
+        $("#frmslide").attr('action', "{{ url(''). "/slide" }}" );
 		$('#btn-save').val("add");
-		$('#frmEmployee').trigger("reset");
+		$('#frmslide').trigger("reset");
 		$('#myModal').modal('show');
 	});
 	
@@ -109,53 +116,27 @@
 	//// ==============Open modal with class==============
 	$(document).on('click','.open-modal',function(){
 		$('.save').text("Update");
-		var employee_id = $(this).val();
-
-        $("#frmEmployee").attr('method', 'POST');
-        $("#frmEmployee").attr('action', url + '/' + employee_id );
-        $.get(url + '/' + employee_id, function (data) {
+		var slide_id = $(this).val();
+		console.log(slide_id);
+        $("#frmslide").attr('method', 'POST');
+        $("#frmslide").attr('action', url + '/' + slide_id );
+        $.get(url + '/' + slide_id, function (data) {
             //success data
             console.log(data);
-            $('#firstName').val(data.firstName);
-            $('#lastName').val(data.lastName);
-            $('#gender').val(data.gender);
-            $('#phone').val(data.phone);
-            $('#email').val(data.email);
-            $('#address').val(data.address);
-            $('#detial').val(data.detial);
+            $('#article_id').val(data.article_id);
+            $('#name').val(data.name);
+            $('#description').val(data.description);
             $('#status').val(data.status);
               
             $('#myModal').modal('show');
         });
 	});
-	// ==============Open modal with id==============
-	// $('#edit-modal').click(function(){
-	// 	$('.save').text("Update");
-	// 	var employee_id = $(this).val();
-
- //        $("#frmEmployee").attr('method', 'PUT');
- //        $("#frmEmployee").attr('action', "{{ url('') }}" + "/employee/" + employee_id);
-	// 	$.get(url + '/' + employee_id, function (data) {
- //            //success data
- //            // console.log(data);
- //            $('#firstName').val(data.firstName);
- //            $('#lastName').val(data.lastName);
- //            $('#gender').val(data.gender);
- //            $('#phone').val(data.phone);
- //            $('#email').val(data.email);
- //            $('#address').val(data.address);
- //            $('#detial').val(data.detial);
- //            $('#status').val(data.status);
-              
- //            $('#myModal').modal('show');
- //        });
-
-	// });
-    //delete employee and remove it from list
-    $(document).on('click','.delete-employee',function(){
+	
+    //delete slide and remove it from list
+    $(document).on('click','.delete-slide',function(){
 
     	if(confirm("Are you sure you want to delete this?")){
-    		var employee_id = $(this).val();
+    		var slide_id = $(this).val();
     		$.ajaxSetup({
     			headers: {
     				'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -163,10 +144,10 @@
     		})
     		$.ajax({
     			type: "DELETE",
-    			url: url + '/' + employee_id,
+    			url: url + '/' + slide_id,
     			success: function (data) {
     				console.log(data);
-    				$("#employee" + employee_id).remove();
+    				$("#slide" + slide_id).remove();
     			},
     			error: function (data) {
     				console.log('Error:', data);
