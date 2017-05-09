@@ -1,16 +1,3 @@
-@section('after_styles')
-	<!-- Inline CSS based on choices in "Settings" tab -->
-<style>
-	.bootstrap-iso .formden_header h2, 
-	.bootstrap-iso .formden_header p, 
-	.bootstrap-iso form{font-family: Arial, Helvetica, sans-serif; 
-		color: black}.bootstrap-iso form button, 
-					.bootstrap-iso form button:hover{color: white !important;} 
-					.asteriskField{color: red;}
-</style>
-
-@stop
-
 {{-- modal --}}
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-dialog">
