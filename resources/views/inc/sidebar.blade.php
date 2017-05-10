@@ -24,7 +24,7 @@
 
           <li><a href="{{ url('').'/slide' }}"><i class="fa fa-list"></i> <span>Setup Slider</span></a></li>
 
-          <li><a href="{{ url(config('backpack.base.route_prefix').'/menu-item') }}"><i class="fa fa-list"></i> <span>Group Company</span></a></li>
+          <li><a href="{{ url('').'/company' }}"><i class="fa fa-list"></i> <span>Group Company</span></a></li>
 
           <li><a href="{{ url('').'/employee' }}"><i class="fa fa-list"></i> <span>Employee</span></a></li>
 

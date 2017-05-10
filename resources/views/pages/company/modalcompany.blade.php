@@ -4,12 +4,12 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-				<h2 class="modal-title" id="myModalLabel" style="color: blue;">Add New Slide</h2>
+				<h2 class="modal-title" id="myModalLabel" style="color: blue;">Add New Group Company</h2>
 			</div>
 			<div class="modal-body">
 				<form method="POST" 
-					id="frmslide" 
-					name="frmslide" 
+					id="frmcompany" 
+					name="frmcompany" 
 					enctype="multipart/form-data"
 					action="{{ url(''). "/company" }}">
 					{{ csrf_field() }}
@@ -19,37 +19,21 @@
 							<div class="row">
 								<div class="col-md-12 col-sm-12 col-xs-12">
 									<form method="POST" 
-										id="frmslide" 
-										name="frmslide" 
+										id="frmcompany" 
+										name="frmcompany" 
 										enctype="multipart/form-data"
 										action="{{ url(''). "/company" }}" >
 										<div class="form-group ">
-											<label class="control-label requiredField" for="article">
-												Article
+											<label class="control-label requiredField" for="company_name">
+												Company Name
 												<span class="asteriskField">
 													*
 												</span>
 											</label>
-											<select class="select form-control" id="article" name="article">
-												@foreach($articles as $article)
-
-												<option value="{{$article->id}}">
-													{{$article->name}}
-												</option>
-												@endforeach
-											</select>
-										</div>
-										<div class="form-group ">
-											<label class="control-label requiredField" for="name">
-												Name
-												<span class="asteriskField">
-													*
-												</span>
-											</label>
-											<input class="form-control" id="name" name="name" type="text"/>
+											<input class="form-control" id="company_name" name="company_name" type="text"/>
 										</div>
 										<div class="form-group">
-											<label class="control-label" for="image">Image</label>
+											<label class="control-label" for="image">Logo</label>
 											<input class="form-control" type="file" name="image" id="image">
 										</div>
 										<div class="form-group ">

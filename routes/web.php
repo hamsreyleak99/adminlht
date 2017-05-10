@@ -42,16 +42,16 @@ Route::group(['prefix' => '/slide'], function () {
     Route::delete('/{slide_id?}', 'SliderController@destroy'); 
 });
 
-// Route::group(['prefix' => '/slider'], function () {
-//     Route::get('/', 'SliderController@view');
-//     Route::get('/get', 'SliderController@get');
-//     Route::post('/store', 'SliderController@store');
-//     Route::post('/update', 'SliderController@update');
-//     Route::post('/destroy', 'SliderController@destroy');
-//     Route::post('/upload', 'SliderController@upload');
-// });
-// Route employee
+//Route company 
+Route::group(['prefix' => '/company'], function () {
+    Route::get('/', 'CompanyController@view');
+    Route::get('/{id?}', 'CompanyController@get');
+    Route::post('/', 'CompanyController@store');
+    Route::post('/{id?}', 'CompanyController@update');
+    Route::delete('/{id?}', 'CompanyController@destroy'); 
+});
 
+// Route employee
 Route::group(['prefix' => '/employee'], function () {
     Route::get('/', 'EmployeeController@view');
     Route::get('/{employee_id?}', 'EmployeeController@get');
