@@ -44,7 +44,7 @@
 											<i class="fa fa-calendar">
 											</i>
 										</div>
-										<input class="form-control" id="post_date" name="post_date" placeholder="YYYY/MM/DD" type="text"/>
+										<input class="form-control" id="post_date" name="post_date" placeholder="YYYY-MM-DD" type="text"/>
 									</div>
 								</div>
 								<div class="form-group ">
@@ -59,7 +59,7 @@
 											<i class="fa fa-calendar">
 											</i>
 										</div>
-										<input class="form-control" id="close_date" name="close_date" placeholder="YYYY/MM/DD" type="text"/>
+										<input class="form-control" id="close_date" name="close_date" placeholder="YYYY-MM-DD" type="text"/>
 									</div>
 								</div>
 								<div class="form-group ">
@@ -77,7 +77,7 @@
 								</div>
 								<div class="form-group">
 									<div>
-										<button class="btn btn-primary " name="submit" id="submit" type="submit">
+										<button class="btn btn-primary save " name="submit" id="submit" type="submit">
 											Submit
 										</button>
 									</div>

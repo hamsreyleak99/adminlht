@@ -13,12 +13,14 @@ class CreatePostEventTable extends Migration
      */
     public function up()
     {
-        Schema::create('post_event', function (Blueprint $table) {
+        Schema::create('events', function (Blueprint $table) {
             $table->increments('id');
             $table->string('title',200);
-            $table->string('image',200)->default('default.jpg');
+            $table->string('image',200);
             $table->string('description',255)->nullable()->default(null);
             $table->enum('status',['Enabled','Disabled'])->default('Enabled');
+            $table->integer('created_by')->unsigned()->nullable()->default(null);
+            $table->integer('updated_by')->unsigned()->nullable()->default(null);
             $table->timestamps();
         });
     }

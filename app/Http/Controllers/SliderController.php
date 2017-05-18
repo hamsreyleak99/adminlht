@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Slider;
+use App\Article;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
+use App\Slider;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class SliderController extends Controller
 {
@@ -33,6 +34,10 @@ class SliderController extends Controller
     {
         $this->data['title'] = 'Slider';
 
+        $article = new Article();
+
+        // $this->data['articleDate'] = $article->get()->content();
+ 
          $articlecontroller 		= 	new ArticleController;
 		$this->data['article'] 	= 	$articlecontroller->getList('all')->content();
 		

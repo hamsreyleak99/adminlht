@@ -59,7 +59,7 @@
 						</thead>
 						<tbody>
 							@foreach($datas as $row)
-							<tr>
+							<tr id="career{{$row->id}}">
 								<td>{{ $row->job_title }}</td>
 								<td>{{ $row->post_date }}</td>
 								<td>{{ $row->close_date }}</td>
@@ -68,7 +68,7 @@
 									<button class="edit_data btn btn-info open-modal" id="edit-modal" value="{{$row->id}}">
 										<span class="glyphicon glyphicon-edit">edit</span>
 									</button>
-									<button class="btn btn-danger delete-employee" value="{{$row->id}}">
+									<button class="btn btn-danger delete-career" value="{{$row->id}}">
 										<span class="glyphicon glyphicon-trash">delete</span>
 									</button>
 								</td>
@@ -87,35 +87,153 @@
 @section('after_scripts')
 <script type="text/javascript">
 
-	// click button add new career
-	$('#add-new').click(function() {
-		$('#frmCareer').trigger("reset");
-		$('#myModal').modal('show');
-	});
-
-   {{-- post_date datepicker --}}
-   $(document).ready(function(){
+	{{-- post_date datepicker --}}
+	$(document).ready(function(){
      var date_input = $('input[name="post_date"]');//our date in put has the name "post_date"
      var container = $('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent():"body";
      date_input.datepicker({
-     	format: "yyyy/mm/dd",
+     	format: "yyyy-mm-dd",
      	container: container,
      	todayHighlight: true,
      	autoclose: true
      });
-  });
-   {{-- close_date datepicker --}}
 
-   $(document).ready(function(){
+     $('#post_date').on('changeDate', function(e){
+     		$('#frmCareer').formValidation('revalidateField', 'post_date');
+     });
+  });
+	{{-- close_date datepicker --}}
+
+	$(document).ready(function(){
      var date_input = $('input[name="close_date"]');//our date in put has the name "post_date"
      var container = $('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent():"body";
      date_input.datepicker({
-     	format: "yyyy/mm/dd",
+     	format: "yyyy-mm-dd",
      	container: container,
      	todayHighlight: true,
      	autoclose: true
      });
+
+     $('#close_date').on('changeDate', function(e){
+     		$('#frmCareer').formValidation('revalidateField', 'close_date');
+     }).on('success.field.fv', function(e, data) {
+            if (data.field === 'post_date' && !data.fv.isValidField('close_date')) {
+                // We need to revalidate the end date
+                data.fv.revalidateField('close_date');
+            }
+
+            if (data.field === 'close_date' && !data.fv.isValidField('post_date')) {
+                // We need to revalidate the start date
+                data.fv.revalidateField('post_date');
+            }
+        });
   });
+	// click button add new career
+	$('#add-new').click(function() {
+		$('.save').text('Save');
+		$('.modal-title').text("Add New Career");
+		$('#frmCareer').trigger("reset");
+		$("#frmCareer").attr('method', 'POST');
+		$("#frmCareer").attr('action', "{{ url(''). "/career" }}" );
+		$('#myModal').modal('show');
+	});
+
+	var url ="{{ url(''). "/career"}}";
+
+	//display modal form for product editing
+	$(document).on('click','.open-modal',function(){
+		$('.save').text("Update");
+		$('.modal-title').text("Update Career");
+		var career_id = $(this).val();
+
+		// change url and method to route update
+		$("#frmCareer").attr('method', 'POST');
+		$("#frmCareer").attr('action', url + '/' + career_id );
+
+        // get data to show in modal
+        $.get(url + '/' + career_id, function (data) {
+            //success data
+            console.log(data);
+            $('#job_title').val(data.job_title);
+            tinymce.editors['job_des_and_req'].setContent(data.job_des_and_req);
+            $('#post_date').val(data.post_date);
+            $('#close_date').val(data.close_date);
+            $('#status').val(data.status);
+
+            // show modal
+            $('#myModal').modal('show');
+         });
+     });
+	//delete employee and remove it from list
+	$(document).on('click','.delete-career',function(){
+
+		if(confirm("Are you sure you want to delete this?")){
+			var career_id = $(this).val();
+			$.ajaxSetup({
+				headers: {
+					'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+				}
+			})
+			$.ajax({
+				type: "DELETE",
+				url: url + '/' + career_id,
+				success: function (data) {
+					console.log(data);
+					$("#career" + career_id).remove();
+				},
+				error: function (data) {
+					console.log('Error:', data);
+				}
+			});
+
+		}else{
+			return false;
+		}
+
+	});
+
+	// form validation
+	$(document).ready(function(){
+		$('#frmCareer').formValidation({
+			framework: 'bootstrap',
+			excluded: 'disabled',
+			fields: {
+				job_title: {
+    				validators: {
+    					notEmpty: {
+    						message: 'The job title is required'
+    					}
+    				}
+    			},
+    			post_date: {
+    				validators: {
+    					notEmpty: {
+    						message: 'The post date is required'
+    					},
+    					date: {
+    						format: 'YYYY-MM-DD',
+    						max: 'close_date',
+    						message: 'The post date is not a valid'
+    					}
+    				}
+    			},
+    			close_date: {
+    				validators: {
+    					notEmpty: {
+    						message: 'The close date is required'
+    					},
+    					date: {
+    						format: 'YYYY-MM-DD',
+    						min: 'post_date',
+    						message: 'The close date is not a valid'
+    					}
+    				}
+    			}
+			}
+    		
+ 		});
+	});
+
 </script>
 <script type="text/javascript">
 	// ======Editor job description and requirement==========
@@ -156,5 +274,6 @@
 
 	tinymce.init(editor_config);
    // ====================================
+
 </script>
 @stop

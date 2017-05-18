@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Career;
+use App\Event;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 use Intervention\Image\Facades\Image;
 
-class CareerController extends Controller
+class EventController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -18,8 +18,10 @@ class CareerController extends Controller
      */
     public function view()
     {
-        $datas = Career::all()->sortByDesc('id')->values()->all();
-        return view('pages.careers.career', array('datas' => $datas ));
+        $datas = Event::all()->sortByDesc('id')->values()->all();
+
+
+        return view('pages.events.event', array('datas' => $datas));
     }
 
     /**
@@ -40,11 +42,14 @@ class CareerController extends Controller
      */
     public function store(Request $request)
     {
-        $career = new Career(); 
+        $event = new Event();
+
         /*validation image*/        
         $validator = Validator::make($request->all(), [
             'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
+        
+
 
         /*check has file and validation image  */
         if($request->hasFile("image")){
@@ -54,22 +59,18 @@ class CareerController extends Controller
                 $filename = time() . '.' . $image->getClientOriginalExtension();
                 Image::make($image)->resize(300, 300)->save( public_path('/uploads/images/' . $filename ));
 
-                $career->image = $filename;
+                $event->image = $filename;
             }else{
                 return Response()->json(['error'=>$validator->errors()->all()]);
             }
         }
-
-        $career->job_title       = $request->job_title;
-        $career->job_des_and_req = $request->job_des_and_req;
-        $career->post_date = $request->post_date;
-        $career->close_date = $request->close_date;
-        $career->status = $request->status;
-        $career->created_by = auth::id();
-        $career->updated_by = auth::id();
-        $career->save();
-
-        return redirect('/career');
+        $event->title = $request->title;
+        $event->description = $request->description;
+        $event->status = $request->status;
+        $event->created_by = Auth::id();
+        $event->updated_by = Auth::id();
+        $event->save();
+        return redirect('/event');
     }
 
     /**
@@ -89,10 +90,10 @@ class CareerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($career_id)
+    public function edit($event_id)
     {
-         $career = Career::find($career_id);
-        return Response()->json($career);  
+        $event = Event::find($event_id);
+        return Response()->Json($event);
     }
 
     /**
@@ -102,9 +103,9 @@ class CareerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $event_id)
     {
-        $career = Career::find($id);
+        $event = Event::find($event_id);
 
         /*validation image*/        
         $validator = Validator::make($request->all(), [
@@ -119,19 +120,20 @@ class CareerController extends Controller
                 $filename = time() . '.' . $image->getClientOriginalExtension();
                 Image::make($image)->resize(300, 300)->save( public_path('/uploads/images/' . $filename ));
 
-                $career->image = $filename;
+                $event->image = $filename;
             }else{
                 return Response()->json(['error'=>$validator->errors()->all()]);
             }
         }
-        $career->job_title       = $request->job_title;
-        $career->job_des_and_req = $request->job_des_and_req;
-        $career->post_date = $request->post_date;
-        $career->close_date = $request->close_date;
-        $career->status = $request->status;
-        $career->updated_by = auth::id();
-        $career->save();
-        return redirect('/career');
+
+        $event->title = $request->title;
+        $event->description = $request->description;
+        $event->status = $request->status;
+        $event->updated_by = Auth::id();
+        $event->save();
+        return redirect('/event');
+
+
     }
 
     /**
@@ -140,9 +142,9 @@ class CareerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($career_id)
+    public function destroy($event_id)
     {
-         $career = Career::destroy($career_id);
-        return response()->json($career);
+        $event = Event::destroy($event_id);
+        return Response()->Json($event);
     }
 }

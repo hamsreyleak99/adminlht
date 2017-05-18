@@ -17,7 +17,8 @@
     <!-- Bootstrap 3.3.5 -->
     <link href="{{ asset('vendor/adminlte/') }}/bootstrap/css/app.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('vendor/adminlte/') }}/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="{{ asset('vendor/adminlte/') }}/bootstrap/css/font-awesome.min.css">
+    {{-- <link rel="stylesheet" href="{{ asset('vendor/adminlte/') }}/bootstrap/css/font-awesome.min.css"> --}}
+    {{-- <link rel="stylesheet" href=" {{ asset('vendor/adminlte/') }}/bootstrap/css/font/fontawesome-webfont.woff2"> --}}
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
 
     <link rel="stylesheet" href="{{ asset('vendor/adminlte/') }}/dist/css/AdminLTE.min.css">
@@ -45,7 +46,8 @@
 
     {{-- datepicker  --}}
     <link rel="stylesheet" href="{{ asset('vendor/adminlte/') }}/bootstrap/css/bootstrap-datepicker3.css">
-
+    {{-- form Validation --}}
+    <link rel="stylesheet" href="{{ asset('vendor/adminlte/') }}/bootstrap/css/formValidation.min.css">
      <!-- Global css use in this application -->
     <style type="text/css">
 
@@ -171,14 +173,14 @@
 
      <!-- jQuery -->
     <script src="{{ asset('vendor/adminlte') }}/bootstrap/js/jquery.min.js"></script>
-    <script src="{{ asset('vendor/adminlte') }}/bootstrap/js/jquery-1.11.3.min.js"></script>
+    {{-- <script src="{{ asset('vendor/adminlte') }}/bootstrap/js/jquery-1.11.3.min.js"></script> --}}
     {{-- javascript --}}
     <script type="{{ asset('vendor/adminlte') }}/bootstrap-filestyle.min.js"> </script>
     <!-- Bootstrap -->
-    <script src="{{ asset('vendor/adminlte') }}/bootstrap/js/jszip.min.js"></script>
+    {{-- <script src="{{ asset('vendor/adminlte') }}/bootstrap/js/jszip.min.js"></script> --}}
     {{-- datepicker --}}
     <script src="{{ asset('vendor/adminlte') }}/bootstrap/js/bootstrap-datepicker.min.js"></script>
-    <script src="{{ asset('vendor/adminlte') }}/bootstrap/js/kendo.all.min.js"></script>
+    {{-- <script src="{{ asset('vendor/adminlte') }}/bootstrap/js/kendo.all.min.js"></script> --}}
     <script src="{{ asset('vendor/adminlte') }}/bootstrap/js/bootstrap.min.js"></script>
     <script src="{{ asset('vendor/adminlte') }}/plugins/pace/pace.min.js"></script>
     <script src="{{ asset('vendor/adminlte') }}/plugins/slimScroll/jquery.slimscroll.min.js"></script>
@@ -187,7 +189,11 @@
 
     {{--  CKeditor  TinyMCE4 --}}
     <script src="{{asset('//cdn.tinymce.com/4')}}/tinymce.min.js"></script>
-    
+
+    {{-- form Validation --}}
+
+    <script src="{{ asset('vendor/adminlte') }}/bootstrap/js/formValidation.min.js"></script>
+    <script src="{{ asset('vendor/adminlte') }}/bootstrap/js/frameworkbootstrap.min.js"></script>
     <!-- page script -->
     <script type="text/javascript">
     
@@ -209,10 +215,10 @@
 
         // Ajax calls should always have the CSRF token attached to them, otherwise they won't work
         $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
 
         /*Set active state on menu element*/
         var current_url = window.location.href;
@@ -225,46 +231,46 @@
         });
 
         /*Initialize status dropdownlist*/ 
-      function initStatusDropDownList()
-      {
-        $("#status").kendoDropDownList({
-          dataValueField: "value",
-          dataTextField: "text",
-          dataSource: statusDataSource  
-        });
-      }
+      // function initStatusDropDownList()
+      // {
+      //   $("#status").kendoDropDownList({
+      //     dataValueField: "value",
+      //     dataTextField: "text",
+      //     dataSource: statusDataSource  
+      //   });
+      // }
 
       /*Initialize gender dropdownlist*/ 
-      function initGenderDropDownList()
-      {
-        $("#gender").kendoDropDownList({
-          dataValueField: "value",
-          dataTextField: "text",
-          dataSource: genderDataSource  
-        });
-      }
+      // function initGenderDropDownList()
+      // {
+      //   $("#gender").kendoDropDownList({
+      //     dataValueField: "value",
+      //     dataTextField: "text",
+      //     dataSource: genderDataSource  
+      //   });
+      // }
 
       /*
         Initialize article dropdownlist
        */
-      function initialArticleDropDownList() {
-        $("#article").kendoDropDownList({
-          valuePrimitive: true,
-          filter: "startswith",
-          optionLabel: "Select article...",
-          dataTextField: "title",
-          dataValueField: "id",
-          dataSource: {
-            transport: {
-              read: {
-                url: crudBaseUrl + "/article/get",
-                type: "GET",
-                dataType: "json"
-              }
-            }
-          }
-        }).data("kendoDropDownList");
-      }
+      // function initialArticleDropDownList() {
+      //   $("#article").kendoDropDownList({
+      //     valuePrimitive: true,
+      //     filter: "startswith",
+      //     optionLabel: "Select article...",
+      //     dataTextField: "title",
+      //     dataValueField: "id",
+      //     dataSource: {
+      //       transport: {
+      //         read: {
+      //           url: crudBaseUrl + "/article/get",
+      //           type: "GET",
+      //           dataType: "json"
+      //         }
+      //       }
+      //     }
+      //   }).data("kendoDropDownList");
+      // }
       
     </script>
 

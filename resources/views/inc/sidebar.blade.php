@@ -28,7 +28,7 @@
 
           <li><a href="{{ url('').'/employee' }}"><i class="fa fa-list"></i> <span>Employee</span></a></li>
 
-          <li><a href="{{ url(config('backpack.base.route_prefix').'/menu-item') }}"><i class="fa fa-list"></i> <span>Post Event</span></a></li>
+          <li><a href="{{ url('').'/event' }}"><i class="fa fa-list"></i> <span>Post Event</span></a></li>
 
           <li><a href="{{ url(''). '/career' }}"><i class="fa fa-list"></i> <span>Career</span></a></li>
           <!-- ======================================= -->

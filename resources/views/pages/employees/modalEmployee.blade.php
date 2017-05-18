@@ -12,21 +12,23 @@
 					name="frmEmployee" 
 					enctype="multipart/form-data"
 					action="{{ url(''). "/employee" }}">
+
 					{{ csrf_field() }}
 					<!-- HTML Form (wrapped in a .bootstrap-iso div) -->
 					<div class="bootstrap-iso">
 						<div class="container-fluid">
 							<div class="row">
 								<div class="col-md-12 col-sm-12 col-xs-12">
-									<form method="post">
-										<div class="form-group ">
+									
+										<div class="form-group">
 											<label class="control-label requiredField" for="firstName">
 												First Name
 												<span class="asteriskField">
 													*
 												</span>
 											</label>
-											<input class="form-control" id="firstName" name="firstName" type="text"/>
+											<input class="form-control" id="firstName" name="firstName" type="text" />
+											
 										</div>
 										<div class="form-group ">
 											<label class="control-label requiredField" for="lastName">
@@ -35,7 +37,7 @@
 													*
 												</span>
 											</label>
-											<input class="form-control" id="lastName" name="lastName" type="text"/>
+											<input class="form-control" id="lastName" name="lastName" type="text" />
 										</div>
 										<div class="form-group">
 											<label class="control-label" for="image">Image</label>
@@ -48,7 +50,7 @@
 													*
 												</span>
 											</label>
-											<select class="select form-control" id="gender" name="gender">
+											<select class="select form-control" id="gender" name="gender" >
 												<option selected="selected" value="">
 												</option>
 												<option value="Male">
@@ -78,13 +80,13 @@
 											<textarea class="form-control" cols="40" id="address" name="address" rows="5"></textarea>
 										</div>
 										<div class="form-group ">
-											<label class="control-label requiredField" for="detial">
+											<label class="control-label requiredField" for="detial" >
 												Description
 												<span class="asteriskField">
 													*
 												</span>
 											</label>
-											<textarea class="form-control" cols="40" id="detial" name="detial" rows="5"></textarea>
+											<textarea class="form-control" cols="40" id="detial" name="detial" rows="5" ></textarea>
 										</div>
 										<div class="form-group ">
 											<label class="control-label " for="status">
@@ -104,7 +106,7 @@
 												<button type="submit" class="btn btn-primary save" id="btn-add" value="add">Submit</button>
 											</div>
 										</div>
-									</form>
+	
 								</div>
 							</div>
 						</div>

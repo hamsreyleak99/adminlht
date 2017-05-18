@@ -54,5 +54,17 @@ Route::group(['prefix' => '/employee'], function () {
 // Route career
 Route::group(['prefix' => '/career'], function(){
     Route::get('/', 'CareerController@view');   
+    Route::get('/{career_id?}', 'CareerController@edit');
     Route::post('/', 'CareerController@store');
+    Route::post('/{career_id?}', 'CareerController@update');
+    Route::delete('/{career_id?}', 'CareerController@destroy');
+});
+
+//Route Event
+Route::group(['prefix' => '/event'], function(){
+    Route::get('/', 'EventController@view');
+    Route::get('/{event_id?}', 'EventController@edit');
+    Route::post('/', 'EventController@store');
+    Route::post('/{event_id?}', 'EventController@update');
+    Route::delete('/{event_id?}', 'EventController@destroy');
 });
