@@ -28,12 +28,10 @@
 			<div class="box box-default">
 				<div class="box-header with-border">
 					<div class="box-title">
-
 						{{-- add button --}}
 						<button class="btn btn-primary pull-left" id="add-new" name="add-new">
 							<span class="glyphicon glyphicon-plus"></span>Add New Employee
 						</button>
-
 						{{-- ===========include modal========== --}}
 						@include('pages.employees.modalEmployee')
 
@@ -50,7 +48,6 @@
 
 					</div>
 				</div>
-
 				<div class="box-body">
 					<table class="table table-bordered">
 						<thead>
@@ -101,6 +98,7 @@
 	<script type="text/javascript">
 	// initStatusDropDownList();
 	// initGenderDropDownList();
+	
 	$.ajaxSetup({
 		headers: {
 			'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')

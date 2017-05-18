@@ -28,22 +28,30 @@ Route::get('/dashboard', 'DashboardController@index');
 //Route article
 Route::group(['prefix' => '/article'], function () {
     Route::get('/', 'ArticleController@view');
-    Route::get('/get', 'ArticleController@get');
-    Route::get('/list/{option}', 'ArticleController@getList');
-    Route::post('/store', 'ArticleController@store');
-    Route::post('/update', 'ArticleController@update');
-    Route::post('/destroy', 'ArticleController@destroy');
+    Route::get('/{id?}', 'ArticleController@get');
+    Route::post('/', 'ArticleController@store');
+    Route::post('/{id?}', 'ArticleController@update');
+    Route::delete('/{id?}', 'ArticleController@destroy'); 
 });
 //Route slider
-Route::group(['prefix' => '/slider'], function () {
+Route::group(['prefix' => '/slide'], function () {
     Route::get('/', 'SliderController@view');
-    Route::get('/get', 'SliderController@get');
-    Route::post('/store', 'SliderController@store');
-    Route::post('/update', 'SliderController@update');
-    Route::post('/destroy', 'SliderController@destroy');
+    Route::get('/{slide_id?}', 'SliderController@get');
+    Route::post('/', 'SliderController@store');
+    Route::post('/{slide_id?}', 'SliderController@update');
+    Route::delete('/{slide_id?}', 'SliderController@destroy'); 
 });
-// Route employee
 
+//Route company 
+Route::group(['prefix' => '/company'], function () {
+    Route::get('/', 'CompanyController@view');
+    Route::get('/{id?}', 'CompanyController@get');
+    Route::post('/', 'CompanyController@store');
+    Route::post('/{id?}', 'CompanyController@update');
+    Route::delete('/{id?}', 'CompanyController@destroy'); 
+});
+
+// Route employee
 Route::group(['prefix' => '/employee'], function () {
     Route::get('/', 'EmployeeController@view');
     Route::get('/{employee_id?}', 'EmployeeController@get');

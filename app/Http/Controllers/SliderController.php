@@ -7,33 +7,26 @@ use App\Http\Controllers\Controller;
 use App\Slider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Image;
+use Validator;
 
 class SliderController extends Controller
 {
     /**
-	 *The information we send to the view
-	 *@var array
-	 */
-	protected $data = []; 
-	/**
-	 * Create a new controller instance.
-	 *
-	 * @return void
-	 */
-	public function __construct()
-	{
-		$this->middleware('auth');
-	}
-   	
-   /**
-     * Show the application dashboard.
+     *The information we send to the view
+     *@var array
+     */
+        protected $data = []; 
+        
+    /**
+     * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function view()
     {
-        $this->data['title'] = 'Slider';
 
+<<<<<<< .mine
         $article = new Article();
 
         // $this->data['articleDate'] = $article->get()->content();
@@ -51,99 +44,133 @@ class SliderController extends Controller
 	public function get()
 	{
 		$sliders = Slider::all()->sortByDesc('id')->values()->all();
+=======
+        $this->data['datas'] = Slider::all()->sortByDesc('id')->values()->all();
 
-		return Response()->Json($sliders);
-	}
-	/**
-	 * Store a newly created resource in storage.
-	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @return \Illuminate\Http\Response
-	 */
-	public function store(Request $request)
-	{
-		$slidersRequest = json_decode($request->input('slider'));
 
-		foreach ($slidersRequest as $key => $sliderRequest) {
-			try {
 
-				$sliderObject = new Slider();
 
-				$sliderObject->title 			= 	$sliderRequest->title;
-				$sliderObject->description 		= 	$sliderRequest->description;
-				$sliderObject->status          	=   $sliderRequest->status;
-				$sliderObject->created_by      	=   auth::id();
-				$sliderObject->updated_by      	=   auth::id();
 
-				$sliderObject->save();
 
-				$slidersResponse[] = $sliderObject;
 
-			} catch (Exception $e) {
-					
-			}
-		}
 
-		return Response()->Json($slidersResponse);
-	}
 
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @return \Illuminate\Http\Response
-	 */
-	public function update(Request $request)
-	{
-		$slidersResponse = json_decode($request->input('slider'));
 
-		foreach ($slidersResponse as $key => $sliderRequest) {
-			try {
 
-				$sliderObject = slider::findOrFail($sliderRequest->id);
-				
-				$sliderObject->title 				= 	$sliderRequest->title;
-				$sliderObject->description 		= 	$sliderRequest->description;
-				$sliderObject->status          	=   $sliderRequest->status;
-				$sliderObject->updated_by      	=   auth::id();
 
-				$sliderObject->save();
 
-				$slidersResponse[] = $sliderObject;
-					
-			} catch (Exception $e) {
-					
-			}
-		}
 
-		return Response()->Json($slidersResponse);
-	}
 
-	/**
-	 * Remove the specified resource from storage.
-	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @return \Illuminate\Http\Response
-	 */
-	public function destroy(Request $request)
-	{
-		$slidersRequest = json_decode($request->input('slider'));
 
-		foreach ($slidersRequest as $key => $sliderRequest) {
-			try {
+>>>>>>> .theirs
 
-				$sliderObject = Slider::findOrFail($sliderRequest->id);
+        $article= new Article();
+        $this->data['articles']=$article->get();
 
-				$sliderObject->delete();
+        return view('pages.slides.slide', $this->data );
+    }
 
-				$slidersResponse[] = $sliderRequest;
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        /*
+            validation image;
+         */
+        $validator = Validator::make($request->all(), [
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
 
-					
-			} catch (Exception $e) {
-					
-			}
-		}
+        $slide = new Slider();
 
-		return Response()->Json($slidersResponse);
-	}
+        $slide->article_id 	= $request->article_id;
+        $slide->name 		= $request->name;
+
+        if($request->hasFile('image')){
+            if($validator->passes()){
+                $image = $request->file('image');
+                $filename = time() . '.' . $image->getClientOriginalExtension();
+                Image::make($image)->resize(300, 300)->save( public_path('/uploads/images/' . $filename ) );
+
+                $slide->image = $filename;
+            }else{
+                return Response()->json(['error'=>$validator->errors()->all()]);
+            }
+        }
+
+        $slide->description 	= $request->description;
+        $slide->status 		    = $request->status;
+        $slide->created_by 	    = auth::id();
+        $slide->updated_by 	    = auth::id();
+        $slide->save(); 
+        return redirect('/slide'); 
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function get($slide_id)
+    {
+        $slide = Slider::find($slide_id);
+        return Response()->json($slide);  
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $slide_id)
+    {
+        
+        $validator = Validator::make($request->all(), [
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+          ]);
+
+        $slide               = Slider::find($slide_id);
+        $slide->article_id   = $request->article_id;
+        $slide->name         = $request->name;
+
+        if($request->hasFile('image')){
+            if($validator->passes()){
+                $image = $request->file('image');
+                $filename = time() . '.' . $image->getClientOriginalExtension();
+                Image::make($image)->resize(300, 300)->save( public_path('/uploads/images/' . $filename ) );
+
+                $slide->image = $filename;
+            }else{
+                return Response()->json(['error'=>$validator->errors()->all()]);
+            }
+        }
+
+        $slide->description 	= $request->description;
+        $slide->status 		    = $request->status;
+        $slide->updated_by 	    = auth::id();
+        $slide->save();
+        return redirect('/slide'); 
+
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($slide_id)
+    {
+
+        $slide = Slider::destroy($slide_id);
+        return response()->json($slide);
+
+    }
 }
