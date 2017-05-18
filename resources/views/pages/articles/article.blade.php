@@ -54,7 +54,7 @@
                   <button class="edit_data btn btn-info open-modal" id="edit-modal" value="{{$row->id}}">
                     <span class="glyphicon glyphicon-edit">edit</span>
                   </button>
-                  <button class="btn btn-danger delete-employee" value="{{$row->id}}">
+                  <button class="btn btn-danger delete-article" value="{{$row->id}}">
                     <span class="glyphicon glyphicon-trash">delete</span>
                   </button>
                 </td>

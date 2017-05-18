@@ -26,43 +26,7 @@ class SliderController extends Controller
     public function view()
     {
 
-<<<<<<< .mine
-        $article = new Article();
-
-        // $this->data['articleDate'] = $article->get()->content();
- 
-         $articlecontroller 		= 	new ArticleController;
-		$this->data['article'] 	= 	$articlecontroller->getList('all')->content();
-		
-        return view('pages.slider',$this->data);
-    }
-    /**
-	 * Get a listing of the resource.
-	 *
-	 * @return \Illuminate\Http\Response
-	 */
-	public function get()
-	{
-		$sliders = Slider::all()->sortByDesc('id')->values()->all();
-=======
         $this->data['datas'] = Slider::all()->sortByDesc('id')->values()->all();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
->>>>>>> .theirs
 
         $article= new Article();
         $this->data['articles']=$article->get();
@@ -87,8 +51,8 @@ class SliderController extends Controller
 
         $slide = new Slider();
 
-        $slide->article_id 	= $request->article_id;
-        $slide->name 		= $request->name;
+        $slide->article_id  = $request->article_id;
+        $slide->name        = $request->name;
 
         if($request->hasFile('image')){
             if($validator->passes()){
@@ -102,10 +66,10 @@ class SliderController extends Controller
             }
         }
 
-        $slide->description 	= $request->description;
-        $slide->status 		    = $request->status;
-        $slide->created_by 	    = auth::id();
-        $slide->updated_by 	    = auth::id();
+        $slide->description     = $request->description;
+        $slide->status          = $request->status;
+        $slide->created_by      = auth::id();
+        $slide->updated_by      = auth::id();
         $slide->save(); 
         return redirect('/slide'); 
     }
@@ -152,9 +116,9 @@ class SliderController extends Controller
             }
         }
 
-        $slide->description 	= $request->description;
-        $slide->status 		    = $request->status;
-        $slide->updated_by 	    = auth::id();
+        $slide->description     = $request->description;
+        $slide->status          = $request->status;
+        $slide->updated_by      = auth::id();
         $slide->save();
         return redirect('/slide'); 
 
