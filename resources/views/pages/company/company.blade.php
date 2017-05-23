@@ -31,7 +31,7 @@
 				<div class="box-title">
 					{{-- add button --}}
 					<button class="btn btn-primary pull-left" id="add-new" name="add-new">
-						<span class="glyphicon glyphicon-plus"></span>Add New Group Company
+						<span class="glyphicon glyphicon-plus"></span>Add New Company
 					</button>
 					{{-- ===========include modal========== --}}
 					@include('pages.company.modalcompany')
@@ -62,16 +62,16 @@
 					</thead>
 					<tbody id="company-table" name="company-table">
 						@foreach($datas as $row)
-						<tr id="slide{{$row->id}}">
+						<tr id="company{{$row->id}}" class="company{{ $row->id_table }}">
 							<td class="text-center">{{$row->company_name}}</td>
-							<td class="text-center"><img src="{{url("/uploads/images/",$row->image)}}" style="height: 120; width: 120px;"></td>
+							<td class="text-center"><img src="{{url("/uploads/images/",$row->image)}}" style="height: 50; width: 50px;"></td>
 							<td class="text-center">{{$row->description}}</td>
 							<td class="text-center">{{$row->status}}</td>
 							<td class="text-center">
 								<button class="edit_data btn btn-info open-modal" id="edit-modal" value="{{$row->id}}">
 									<span class="glyphicon glyphicon-edit">edit</span>
 								</button>
-								<button class="btn btn-danger delete-slide" value="{{$row->id}}">
+								<button class="btn btn-danger delete-company" value="{{$row->id_table}}">
 									<span class="glyphicon glyphicon-trash">delete</span>
 								</button>
 							</td>
@@ -83,6 +83,8 @@
 				
 			</div>
 		</div>
+
+		{{ $datas->links() }}
 	</div>
 </div>
 <meta name="_token" content="{!! csrf_token() !!}" />
@@ -100,6 +102,7 @@
 	var url ="{{ url(''). "/company"}}";
 	// display modal
 	$('#add-new').click(function(){
+		$('.modal-title').text("Add New Company");
 		$('.save').text("Save");
 		$("#frmcompany").attr('method', 'POST');
         $("#frmcompany").attr('action', "{{ url(''). "/company" }}" );
@@ -111,6 +114,7 @@
 	//display modal form for product editing
 	//// ==============Open modal with class==============
 	$(document).on('click','.open-modal',function(){
+		$('.modal-title').text('Update Company');
 		$('.save').text("Update");
 		var id = $(this).val();
 		console.log(id);
@@ -128,8 +132,8 @@
         });
 	});
 	
-    //delete slide and remove it from list
-    $(document).on('click','.delete-slide',function(){
+    //delete company and remove it from list
+    $(document).on('click','.delete-company',function(){
 
     	if(confirm("Are you sure you want to delete this?")){
     		var id = $(this).val();
@@ -143,7 +147,7 @@
     			url: url + '/' + id,
     			success: function (data) {
     				console.log(data);
-    				$("#slide" + id).remove();
+    				$(".company" + id).remove();
     			},
     			error: function (data) {
     				console.log('Error:', data);
@@ -154,6 +158,24 @@
     		return false;
     	}
 
+    });
+
+    // form validation
+    
+    $(document).ready(function(){
+    	$('#frmcompany').formValidation({
+    		framework: 'bootstrap',
+    		excluded: 'disabled',
+    		fields: {
+    			company_name: {
+    				validators: {
+    					notEmpty: {
+    						message: 'The company name is required'
+    					}
+    				}
+    			}
+    		}
+    	});
     });
 
 </script>

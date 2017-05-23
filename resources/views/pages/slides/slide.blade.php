@@ -54,7 +54,7 @@
 					<thead>
 						<tr>							
 							<th class="text-center">Article</th>
-							<th class="text-center">Name</th>
+							<th class="text-center">Title</th>
 							<th class="text-center">image</th>
 							<th class="text-center">description</th>
 							<th class="text-center">status</th>
@@ -62,23 +62,23 @@
 						</tr>
 					</thead>
 					<tbody id="slide-table" name="slide-table">
+					
 						@foreach($datas as $row)
-						<tr id="slide{{$row->id}}">
-							<td class="text-center">{{$row->article_id}}</td>
+						<tr id="slide{{$row->id}}" class="slide{{ $row->id_table }}">
+							<td class="text-center">{{$row->article->name}}</td>
 							<td class="text-center">{{$row->name}}</td>
-							<td class="text-center"><img src="{{url("/uploads/images/",$row->image)}}" style="height: 120; width: 120px;"></td>
+							<td class="text-center"><img src="{{url("/uploads/images/",$row->image)}}" style="height: 80; width: 80px;"></td>
 							<td class="text-center">{{$row->description}}</td>
 							<td class="text-center">{{$row->status}}</td>
 							<td class="text-center">
 								<button class="edit_data btn btn-info open-modal" id="edit-modal" value="{{$row->id}}">
 									<span class="glyphicon glyphicon-edit">edit</span>
 								</button>
-								<button class="btn btn-danger delete-slide" value="{{$row->id}}">
+								<button class="btn btn-danger delete-slide" value="{{$row->id_table}}">
 									<span class="glyphicon glyphicon-trash">delete</span>
 								</button>
 							</td>
 						</tr>
-
 						@endforeach
 					</tbody>
 				</table>
@@ -92,10 +92,7 @@
 
 @section('after_scripts')
 
-<script type="text/javascript">
-	// initStatusDropDownList();
-	// initGenderDropDownList();
-	
+<script type="text/javascript">	
 	$.ajaxSetup({
 		headers: {
 			'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -147,7 +144,7 @@
     			url: url + '/' + slide_id,
     			success: function (data) {
     				console.log(data);
-    				$("#slide" + slide_id).remove();
+    				$(".slide" + slide_id).remove();
     			},
     			error: function (data) {
     				console.log('Error:', data);
@@ -158,6 +155,29 @@
     		return false;
     	}
 
+    });
+    // form validation
+    $(document).ready(function() {
+    	$('#frmslide').formValidation({
+    		framework: 'bootstrap',
+    		excluded: 'disabled',
+    		fields: {
+    			article_id: {
+    				validators: {
+    					notEmpty: {
+    						message: 'The article name is required'
+    					},
+    				}
+    			},
+    			name: {
+    				validators: {
+    					notEmpty: {
+    						message: 'The title is required'
+    					}
+    				}
+    			}
+    		}
+    	});
     });
 
 </script>

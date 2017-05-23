@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\frontend\HomeController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -12,12 +14,12 @@
 */
 
 
-Route::get('/', function () {
+Route::get('/admin', function () {
 	if (Auth::check()) 
     {
     	return redirect('/dashboard');
     }else{
-    	return redirect('/login');
+    	return redirect('/admin/login');
     }    
 });
 
@@ -25,13 +27,17 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/dashboard', 'DashboardController@index');
+
+// ==================================================
+                // Route Backend
+
 //Route article
 Route::group(['prefix' => '/article'], function () {
     Route::get('/', 'ArticleController@view');
     Route::get('/{id?}', 'ArticleController@get');
     Route::post('/', 'ArticleController@store');
     Route::post('/{id?}', 'ArticleController@update');
-    Route::delete('/{id?}', 'ArticleController@destroy'); 
+    // Route::delete('/{id?}', 'ArticleController@destroy'); 
 });
 //Route slider
 Route::group(['prefix' => '/slide'], function () {
@@ -76,3 +82,52 @@ Route::group(['prefix' => '/event'], function(){
     Route::post('/{event_id?}', 'EventController@update');
     Route::delete('/{event_id?}', 'EventController@destroy');
 });
+
+// ========================================================================
+
+            // Route FrontEnd
+    
+    // Route Home
+    Route::get('/', 'frontend\HomeController@getIndex');
+
+    // Route About
+    
+    Route::get('/about', function(){
+        return view('FrontEnd/pages/about');
+    });
+    
+    // Route Company
+    
+    Route::get('/group-company', function(){
+        return view('FrontEnd/pages/company');
+    });
+
+    // Route Team
+    // 
+    Route::get('/team', function(){
+        return view('FrontEnd/pages/team');
+    });
+
+    // Route Event
+    
+    Route::get('/event-frontend', function(){
+        return view('FrontEnd/pages/event');
+    });
+
+    // Route Trading
+    
+    Route::get('/trading', function(){
+        return view('FrontEnd.pages.trading');
+    });
+
+    // Route Career
+    
+    Route::get('/career-frontend', function(){
+        return view ('FrontEnd/pages/career');
+    });
+
+    // Route Contact Us
+    
+    Route::get('/contact', function(){
+        return view('FrontEnd/pages/contact');
+    });

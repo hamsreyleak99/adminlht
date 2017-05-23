@@ -3,6 +3,8 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\App;
+use Session;
 
 class Employee extends Model
 {
@@ -23,4 +25,5 @@ class Employee extends Model
     protected $hidden = [
         'created_by','updated_by'
     ];
+
 }

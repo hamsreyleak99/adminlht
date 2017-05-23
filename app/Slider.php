@@ -23,4 +23,12 @@ class Slider extends Model
     protected $fillable = [
         'name', 'image'
     ];
+
+    /**
+     * Get the article that owns the slider.
+     */
+    public function article()
+    {
+        return $this->belongsTo('App\Article');
+    }
 }

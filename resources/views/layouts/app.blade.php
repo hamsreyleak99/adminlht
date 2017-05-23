@@ -229,48 +229,6 @@
             $(this).parents('li').addClass('active');
           }
         });
-
-        /*Initialize status dropdownlist*/ 
-      // function initStatusDropDownList()
-      // {
-      //   $("#status").kendoDropDownList({
-      //     dataValueField: "value",
-      //     dataTextField: "text",
-      //     dataSource: statusDataSource  
-      //   });
-      // }
-
-      /*Initialize gender dropdownlist*/ 
-      // function initGenderDropDownList()
-      // {
-      //   $("#gender").kendoDropDownList({
-      //     dataValueField: "value",
-      //     dataTextField: "text",
-      //     dataSource: genderDataSource  
-      //   });
-      // }
-
-      /*
-        Initialize article dropdownlist
-       */
-      // function initialArticleDropDownList() {
-      //   $("#article").kendoDropDownList({
-      //     valuePrimitive: true,
-      //     filter: "startswith",
-      //     optionLabel: "Select article...",
-      //     dataTextField: "title",
-      //     dataValueField: "id",
-      //     dataSource: {
-      //       transport: {
-      //         read: {
-      //           url: crudBaseUrl + "/article/get",
-      //           type: "GET",
-      //           dataType: "json"
-      //         }
-      //       }
-      //     }
-      //   }).data("kendoDropDownList");
-      // }
       
     </script>
 

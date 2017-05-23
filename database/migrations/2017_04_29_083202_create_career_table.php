@@ -15,6 +15,7 @@ class CreateCareerTable extends Migration
     {
         Schema::create('careers', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('id_table')->unsigned();
             $table->string('image',200)->default('default.jpg');
             $table->string('job_title',200);
             $table->longText('job_des_and_req')->nullable()->default(null);
@@ -23,6 +24,7 @@ class CreateCareerTable extends Migration
             $table->enum('status',['Enabled','Disabled'])->default('Enabled');
             $table->integer('created_by')->unsigned()->nullable()->default(null);
             $table->integer('updated_by')->unsigned()->nullable()->default(null);
+            $table->string('lang',2);
             $table->timestamps();
         });
     }

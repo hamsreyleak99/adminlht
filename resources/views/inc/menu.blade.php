@@ -23,7 +23,18 @@
           <li><a href="{{ url('').'/register' }}">Register</a></li>
           @endif
         @else
-          <li><a href="{{ route('logout') }}"><i class="fa fa-btn fa-sign-out"></i> Logout</a></li>    
+          <li style="width:54px;padding-top: 15px;">
+            <form action="" method="get">
+              <input type="submit" name="lang"​​ style="background: green ;border:0px;" value="EN"​​​​​​​>
+            </form>
+          </li>
+          <li style="width:54px;padding-top: 15px;">
+            <form action="" method="get">
+              <input type="submit" name="lang" value="KH" style="background: red ;border:0px;">
+            </form>
+          </li>
+
+          <li><a href="{{ redirect('/admin/login') }}"><i class="fa fa-btn fa-sign-out"></i> Logout</a></li>    
         @endif
 
        <!-- ========== End of top menu right items ========== -->

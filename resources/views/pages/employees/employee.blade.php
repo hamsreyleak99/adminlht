@@ -64,7 +64,7 @@
 						</thead>
 						<tbody id="employee-table" name="employee-table">
 							@foreach($datas as $row)
-							<tr id="employee{{$row->id}}">
+							<tr id="employee{{$row->id}}" class="employee{{$row->id_table}}">
 
 								<td class="text-center">{{$row->firstName}}</td>
 								<td class="text-center">{{$row->lastName}}</td>
@@ -76,7 +76,7 @@
 									<button class="edit_data btn btn-info open-modal" id="edit-modal" value="{{$row->id}}">
 										<span class="glyphicon glyphicon-edit">edit</span>
 									</button>
-									<button class="btn btn-danger delete-employee" value="{{$row->id}}">
+									<button class="btn btn-danger delete-employee" value="{{$row->id_table}}">
 										<span class="glyphicon glyphicon-trash">delete</span>
 									</button>
 								</td>
@@ -85,9 +85,10 @@
 							@endforeach
 						</tbody>
 					</table>
-
+                    
 				</div>
 			</div>
+            {{ $datas->links() }} <!--pagination-->
 		</div>
 	</div>
 	<meta name="_token" content="{!! csrf_token() !!}" />
@@ -107,6 +108,7 @@
 	var url ="{{ url(''). "/employee"}}";
 	// display modal
 	$('#add-new').click(function(){
+        $('.modal-title').text("Add New Employee");
 		$('.save').text("Save");
 		$("#frmEmployee").attr('method', 'POST');
 		$("#frmEmployee").attr('action', "{{ url(''). "/employee" }}" );
@@ -118,6 +120,7 @@
 	//display modal form for product editing
 	// ==============Open modal with class==============
 	$(document).on('click','.open-modal',function(){
+        $('.modal-title').text("Update Employee");
 		$('.save').text("Update");
 		var employee_id = $(this).val();
 
@@ -143,6 +146,7 @@
 
     	if(confirm("Are you sure you want to delete this?")){
     		var employee_id = $(this).val();
+            console.log(employee_id);
     		$.ajaxSetup({
     			headers: {
     				'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -153,7 +157,7 @@
     			url: url + '/' + employee_id,
     			success: function (data) {
     				console.log(data);
-    				$("#employee" + employee_id).remove();
+    				$(".employee" + employee_id).remove();
     			},
     			error: function (data) {
     				console.log('Error:', data);
@@ -187,10 +191,7 @@
     						max: 30,
     						message: 'The first name must be more than 2 and less than 30 characters long'
     					},
-    					regexp: {
-    						regexp: /^[a-zA-Z]+$/,
-    						message: 'The first name can only consist of alphabetical'
-    					}
+    					
     				}
     			},
     			lastName: {
@@ -203,10 +204,6 @@
     						max: 30,
     						message: 'The last name must be more than 2 and less than 30 characters long'
     					},
-    					regexp: {
-    						regexp: /^[a-zA-Z]+$/,
-    						message: 'The last name can only consist of alphabetical'
-    					}
     				}
     			},
     			gender: {

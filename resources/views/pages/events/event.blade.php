@@ -58,7 +58,7 @@
 					</thead>
 					<tbody >
 						@foreach($datas as $row)
-						<tr id="event{{$row->id}}">
+						<tr id="event{{$row->id}}" class="event{{ $row->id_table }}">
 							
 							<td class="text-center">{{$row->title}}</td>
 							<td class="text-center">{{$row->image}}</td>
@@ -68,7 +68,7 @@
 								<button class="edit_data btn btn-info open-modal" id="edit-modal" value="{{$row->id}}">
 									<span class="glyphicon glyphicon-edit">edit</span>
 								</button>
-								<button class="btn btn-danger delete-event" value="{{$row->id}}">
+								<button class="btn btn-danger delete-event" value="{{$row->id_table}}">
 									<span class="glyphicon glyphicon-trash">delete</span>
 								</button>
 							</td>
@@ -80,6 +80,7 @@
 				
 			</div>
 		</div>
+		{{ $datas->links() }} <!--pagination-->
 	</div>
 </div>
 <meta name="_token" content="{!! csrf_token() !!}" />
@@ -134,7 +135,7 @@
 	    			url: url + '/' + event_id,
 	    			success: function (data) {
 	    				console.log(data);
-	    				$("#event" + event_id).remove();
+	    				$(".event" + event_id).remove();
 	    			},
 	    			error: function (data) {
 	    				console.log('Error:', data);
@@ -151,11 +152,6 @@
 	    	$('#frmEvent').formValidation({
 	    		framework: 'bootstrap',
 	    		excluded: ':disabled',
-	    		icon: {
-	    			valid: 'glyphicon glyphicon-ok',
-	    			invalid: 'glyphicon glyphicon-remove',
-	    			validating: 'glyphicon glyphicon-refresh'
-	    		},
 	    		fields: {
 	    			title: {
 	    				validators: {

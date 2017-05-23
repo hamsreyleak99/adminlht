@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Employee;
+use App\Http\Controllers\Helpers\Language;
+use Illuminate\Database\Eloquent\Relations\paginate;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Response;
@@ -18,11 +21,17 @@ class EmployeeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function view()
+    public function view(Request $request)
     {
-        // $datas = Employee::all();
-        $datas = Employee::all()->sortByDesc('id')->values()->all();//have number
-        // $datas = Employee::simplePaginate(5);//no number
+        // check language
+        Language::checkLang($request->lang);
+        // get language
+        $lang = Language::getTitleLang();
+        
+        $employee = new Employee();
+
+        $datas = $employee->where('lang', '=', $lang)->orderBy('created_at', 'desc')->paginate(10);
+        
         return view('pages.employees.employee', array('datas' => $datas ));
     }
 
@@ -54,37 +63,48 @@ class EmployeeController extends Controller
                 // 'gender' => 'required',
                 // 'phone' => 'min:9|max:20|numeric',
                 // 'email' => 'email|unique:users',
-                // 'address' => 'string|min:4',
+                // 'address' => 'string|min:2',
                 // 'description' => 'required',
         ]);
 
-        if($validator->passes()){
+        
+        $listLeng = config('app.locales');
+        $id_table = Employee::max('id_table')+1;
+        
+        foreach ($listLeng as $key => $value) {
 
-            $employee = new Employee();
+            if($validator->passes()){
 
-            $employee->firstName = $request->firstName;
-            $employee->lastName = $request->lastName;
-            $employee->gender = $request->gender;
+                $employee = new Employee();
 
-            if($request->hasFile('image')){
-                
-                    $image = $request->file('image');
-                    $filename = time() . '.' . $image->getClientOriginalExtension();
-                    Image::make($image)->resize(300, 300)->save( public_path('/uploads/images/' . $filename ) );
+                $employee->id_table = $id_table;
+                $employee->firstName = $request->firstName;
+                $employee->lastName = $request->lastName;
+                $employee->gender = $request->gender;
 
-                    $employee->image = $filename;          
-            }
+                if($request->hasFile('image')){
+                    
+                        $image = $request->file('image');
+                        $filename = time() . '.' . $image->getClientOriginalExtension();
+                        Image::make($image)->resize(300, 300)->save( public_path('/uploads/images/' . $filename ) );
 
-            $employee->phone = $request->phone;
-            $employee->email = $request->email;
-            $employee->address = $request->address;
-            $employee->detial = $request->detial;
-            $employee->status = $request->status;
-            $employee->created_by = auth::id();
-            $employee->updated_by = auth::id();
+                        $employee->image = $filename;          
+                }
 
-            $employee->save();           
-        }  
+                $employee->phone = $request->phone;
+                $employee->email = $request->email;
+                $employee->address = $request->address;
+                $employee->detial = $request->detial;
+                $employee->status = $request->status;
+                $employee->lang = $key;
+                $employee->created_by = auth::id();
+                $employee->updated_by = auth::id();
+
+                $employee->save();           
+            }  
+        }
+
+         
         return redirect('/employee'); 
     }
 
@@ -163,8 +183,10 @@ class EmployeeController extends Controller
     public function destroy($employee_id)
     {
 
-        $employee = Employee::destroy($employee_id);
-        return response()->json($employee);
+        // $employee = Employee::destroy($employee_id);
+        $employee = new Employee();
+        $response =  $employee->where('id_table', '=', $employee_id)->delete();
+        return response()->json($response);
 
     }
 }

@@ -15,11 +15,13 @@ class CreateArticlesTable extends Migration
     {
         Schema::create('articles', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('id_table')->unsigned();
             $table->string('name',60);
             $table->string('description',200)->nullable()->default(null);
             $table->enum('status',['Enabled','Disabled'])->default('Enabled');
             $table->integer('created_by')->unsigned()->nullable()->default(null);
             $table->integer('updated_by')->unsigned()->nullable()->default(null);
+            $table->string('lang',2);
             $table->timestamps();
         });
     }

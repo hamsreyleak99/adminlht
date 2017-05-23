@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Article;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Helpers\Language;
 use App\Slider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -23,13 +24,19 @@ class SliderController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function view()
+    public function view(Request $request)
     {
+        $slide = new Slider();
+        $article = new Article();
+        // check Language
+        Language::checkLang($request->lang);
+        // get Language
+        $lang = Language::getTitleLang();
 
-        $this->data['datas'] = Slider::all()->sortByDesc('id')->values()->all();
+        $this->data['datas'] = $slide->where('lang', '=', $lang)->orderBy('created_at', 'desc')->paginate(10);
 
-        $article= new Article();
-        $this->data['articles']=$article->get();
+        
+        $this->data['articles']=$article->where('lang', '=', $lang)->paginate(10);
 
         return view('pages.slides.slide', $this->data );
     }
@@ -49,28 +56,37 @@ class SliderController extends Controller
             'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
-        $slide = new Slider();
+        $listLang = config('app.locales');
+        $id_table = Slider::max('id_table')+1;
 
-        $slide->article_id  = $request->article_id;
-        $slide->name        = $request->name;
+        foreach ($listLang as $key => $value) {
+            $slide = new Slider();
 
-        if($request->hasFile('image')){
-            if($validator->passes()){
-                $image = $request->file('image');
-                $filename = time() . '.' . $image->getClientOriginalExtension();
-                Image::make($image)->resize(300, 300)->save( public_path('/uploads/images/' . $filename ) );
+            $slide->id_table    = $id_table;
+            $slide->article_id  = $request->article_id;
+            $slide->name        = $request->name;
 
-                $slide->image = $filename;
-            }else{
-                return Response()->json(['error'=>$validator->errors()->all()]);
+            if($request->hasFile('image')){
+                if($validator->passes()){
+                    $image = $request->file('image');
+                    $filename = time() . '.' . $image->getClientOriginalExtension();
+                    Image::make($image)->resize(300, 300)->save( public_path('/uploads/images/' . $filename ) );
+
+                    $slide->image = $filename;
+                }else{
+                    return Response()->json(['error'=>$validator->errors()->all()]);
+                }
             }
+
+            $slide->description     = $request->description;
+            $slide->status          = $request->status;
+            $slide->lang            = $key;
+            $slide->created_by      = auth::id();
+            $slide->updated_by      = auth::id();
+            $slide->save(); 
         }
 
-        $slide->description     = $request->description;
-        $slide->status          = $request->status;
-        $slide->created_by      = auth::id();
-        $slide->updated_by      = auth::id();
-        $slide->save(); 
+        
         return redirect('/slide'); 
     }
 
@@ -133,7 +149,8 @@ class SliderController extends Controller
     public function destroy($slide_id)
     {
 
-        $slide = Slider::destroy($slide_id);
+        $slide = new Slider();
+        $slide->where('id_table', '=', $slide_id)->delete();
         return response()->json($slide);
 
     }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Article;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Helpers\Language;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -14,12 +15,17 @@ class ArticleController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function view()
+    public function view(Request $request)
     {
-        $datas = Article::all()->sortByDesc('id')->values()->all();
+        // check language
+        Language::checkLang($request->lang);
+        // get title lang
+        $lang = Language::getTitleLang();
+
+        $article = new Article();
+        $datas = $article->where('lang', '=', $lang)->paginate(10);
        
         return view('pages.articles.article', array('datas' => $datas ));
-        //return view('pages.articles.test', array('datas' => $datas ));
     }
 
     
@@ -79,12 +85,12 @@ class ArticleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
+    // public function destroy($id)
+    // {
 
-        $article = article::destroy($id);
-        return response()->json($article);
+    //     $article = article::destroy($id);
+    //     return response()->json($article);
 
-    }
+    // }
 	
 }

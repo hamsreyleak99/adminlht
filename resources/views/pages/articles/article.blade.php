@@ -39,38 +39,41 @@
         <div class="box-body">
           <table class="table table-bordered">
             <thead>
-              <tr>              
+              <tr>    
+                <th class="text-center">ID</th>          
                 <th class="text-center">Name</th>
                 <th class="text-center">Status</th>
                 <th class="text-center">Action</th>
               </tr>
             </thead>
             <tbody id="article-table" name="article-table">
+              <?php $id= 1; ?>
               @foreach($datas as $row)
               <tr id="article{{$row->id}}">
+                <td class="text-center">{{ $id }}</td>
                 <td class="text-center">{{$row->name}}</td>
                 <td class="text-center">{{$row->status}}</td>
                 <td class="text-center">
                   <button class="edit_data btn btn-info open-modal" id="edit-modal" value="{{$row->id}}">
                     <span class="glyphicon glyphicon-edit">edit</span>
                   </button>
-                  <button class="btn btn-danger delete-article" value="{{$row->id}}">
+                  {{-- <button class="btn btn-danger delete-article" value="{{$row->id}}">
                     <span class="glyphicon glyphicon-trash">delete</span>
-                  </button>
+                  </button> --}}
                 </td>
               </tr>
-
+              <?php $id++; ?>
               @endforeach
             </tbody>
           </table>
           
         </div>
       </div>
+      {{ $datas->links() }} <!--pagination-->
     </div>
   </div>
   <meta name="_token" content="{!! csrf_token() !!}" />
 @stop
-
 @section('after_scripts')
 
   <script type="text/javascript">
@@ -112,31 +115,31 @@
     });
     // ==============Open modal with id==============
       //delete article and remove it from list
-      $(document).on('click','.delete-article',function(){
+      // $(document).on('click','.delete-article',function(){
 
-        if(confirm("Are you sure you want to delete this?")){
-          var id = $(this).val();
-          $.ajaxSetup({
-            headers: {
-              'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-            }
-          })
-          $.ajax({
-            type: "DELETE",
-            url: url + '/' + id,
-            success: function (data) {
-              console.log(data);
-              $("#article" + id).remove();
-            },
-            error: function (data) {
-              console.log('Error:', data);
-            }
-          });
+      //   if(confirm("Are you sure you want to delete this?")){
+      //     var id = $(this).val();
+      //     $.ajaxSetup({
+      //       headers: {
+      //         'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+      //       }
+      //     })
+      //     $.ajax({
+      //       type: "DELETE",
+      //       url: url + '/' + id,
+      //       success: function (data) {
+      //         console.log(data);
+      //         $("#article" + id).remove();
+      //       },
+      //       error: function (data) {
+      //         console.log('Error:', data);
+      //       }
+      //     });
 
-        }else{
-          return false;
-        }
-      });
+      //   }else{
+      //     return false;
+      //   }
+      // });
   </script>
 
 @stop

@@ -59,7 +59,7 @@
 						</thead>
 						<tbody>
 							@foreach($datas as $row)
-							<tr id="career{{$row->id}}">
+							<tr id="career{{$row->id}}" class="career{{ $row->id_table }}">
 								<td>{{ $row->job_title }}</td>
 								<td>{{ $row->post_date }}</td>
 								<td>{{ $row->close_date }}</td>
@@ -68,7 +68,7 @@
 									<button class="edit_data btn btn-info open-modal" id="edit-modal" value="{{$row->id}}">
 										<span class="glyphicon glyphicon-edit">edit</span>
 									</button>
-									<button class="btn btn-danger delete-career" value="{{$row->id}}">
+									<button class="btn btn-danger delete-career" value="{{$row->id_table}}">
 										<span class="glyphicon glyphicon-trash">delete</span>
 									</button>
 								</td>
@@ -78,6 +78,7 @@
 					</table>
 				</div>
 			</div>
+			{{ $datas->links() }}
 		</div>
 	</div>
 </div>
@@ -89,45 +90,27 @@
 
 	{{-- post_date datepicker --}}
 	$(document).ready(function(){
-     var date_input = $('input[name="post_date"]');//our date in put has the name "post_date"
-     var container = $('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent():"body";
-     date_input.datepicker({
-     	format: "yyyy-mm-dd",
-     	container: container,
-     	todayHighlight: true,
-     	autoclose: true
-     });
-
-     $('#post_date').on('changeDate', function(e){
-     		$('#frmCareer').formValidation('revalidateField', 'post_date');
-     });
-  });
+		var date_input = $('input[name="post_date"]');//our date in put has the name "post_date"
+		var container = $('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent():"body";
+		date_input.datepicker({
+			format: "yyyy-mm-dd",
+			container: container,
+			todayHighlight: true,
+			autoclose: true
+		});
+	});
 	{{-- close_date datepicker --}}
 
 	$(document).ready(function(){
-     var date_input = $('input[name="close_date"]');//our date in put has the name "post_date"
-     var container = $('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent():"body";
-     date_input.datepicker({
-     	format: "yyyy-mm-dd",
-     	container: container,
-     	todayHighlight: true,
-     	autoclose: true
-     });
-
-     $('#close_date').on('changeDate', function(e){
-     		$('#frmCareer').formValidation('revalidateField', 'close_date');
-     }).on('success.field.fv', function(e, data) {
-            if (data.field === 'post_date' && !data.fv.isValidField('close_date')) {
-                // We need to revalidate the end date
-                data.fv.revalidateField('close_date');
-            }
-
-            if (data.field === 'close_date' && !data.fv.isValidField('post_date')) {
-                // We need to revalidate the start date
-                data.fv.revalidateField('post_date');
-            }
-        });
-  });
+		var date_input = $('input[name="close_date"]');//our date in put has the name "post_date"
+		var container = $('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent():"body";
+		date_input.datepicker({
+			format: "yyyy-mm-dd",
+			container: container,
+			todayHighlight: true,
+			autoclose: true
+		}); 
+  	});
 	// click button add new career
 	$('#add-new').click(function() {
 		$('.save').text('Save');
@@ -179,7 +162,7 @@
 				url: url + '/' + career_id,
 				success: function (data) {
 					console.log(data);
-					$("#career" + career_id).remove();
+					$(".career" + career_id).remove();
 				},
 				error: function (data) {
 					console.log('Error:', data);
@@ -191,49 +174,6 @@
 		}
 
 	});
-
-	// form validation
-	$(document).ready(function(){
-		$('#frmCareer').formValidation({
-			framework: 'bootstrap',
-			excluded: 'disabled',
-			fields: {
-				job_title: {
-    				validators: {
-    					notEmpty: {
-    						message: 'The job title is required'
-    					}
-    				}
-    			},
-    			post_date: {
-    				validators: {
-    					notEmpty: {
-    						message: 'The post date is required'
-    					},
-    					date: {
-    						format: 'YYYY-MM-DD',
-    						max: 'close_date',
-    						message: 'The post date is not a valid'
-    					}
-    				}
-    			},
-    			close_date: {
-    				validators: {
-    					notEmpty: {
-    						message: 'The close date is required'
-    					},
-    					date: {
-    						format: 'YYYY-MM-DD',
-    						min: 'post_date',
-    						message: 'The close date is not a valid'
-    					}
-    				}
-    			}
-			}
-    		
- 		});
-	});
-
 </script>
 <script type="text/javascript">
 	// ======Editor job description and requirement==========

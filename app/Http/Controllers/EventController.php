@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Event;
+use App\Http\Controllers\Helpers\Language;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
@@ -16,11 +17,16 @@ class EventController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function view()
+    public function view(Request $request)
     {
-        $datas = Event::all()->sortByDesc('id')->values()->all();
+        // check Language
+        Language::checkLang($request->lang);
+        // get language
+        $lang = Language::getTitleLang();
 
+        $event = new Event();
 
+        $datas = $event->where('lang', '=', $lang)->orderBy('created_at', 'desc')->paginate(10);
         return view('pages.events.event', array('datas' => $datas));
     }
 
@@ -42,34 +48,42 @@ class EventController extends Controller
      */
     public function store(Request $request)
     {
-        $event = new Event();
+        
 
         /*validation image*/        
         $validator = Validator::make($request->all(), [
             'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
         
+        $listLang = config('app.locales');
+        $id_table = Event::max('id_table')+1;
 
+        foreach ($listLang as $key => $value) {
 
-        /*check has file and validation image  */
-        if($request->hasFile("image")){
-            if($validator->passes()){
+            $event = new Event();
+            /*check has file and validation image  */
+            if($request->hasFile("image")){
+                if($validator->passes()){
 
-                $image = $request->file('image');
-                $filename = time() . '.' . $image->getClientOriginalExtension();
-                Image::make($image)->resize(300, 300)->save( public_path('/uploads/images/' . $filename ));
+                    $image = $request->file('image');
+                    $filename = time() . '.' . $image->getClientOriginalExtension();
+                    Image::make($image)->resize(300, 300)->save( public_path('/uploads/images/' . $filename ));
 
-                $event->image = $filename;
-            }else{
-                return Response()->json(['error'=>$validator->errors()->all()]);
+                    $event->image = $filename;
+                }else{
+                    return Response()->json(['error'=>$validator->errors()->all()]);
+                }
             }
+            $event->id_table = $id_table;
+            $event->title = $request->title;
+            $event->description = $request->description;
+            $event->status = $request->status;
+            $event->lang = $key;
+            $event->created_by = Auth::id();
+            $event->updated_by = Auth::id();
+            $event->save();
         }
-        $event->title = $request->title;
-        $event->description = $request->description;
-        $event->status = $request->status;
-        $event->created_by = Auth::id();
-        $event->updated_by = Auth::id();
-        $event->save();
+        
         return redirect('/event');
     }
 
@@ -144,7 +158,9 @@ class EventController extends Controller
      */
     public function destroy($event_id)
     {
-        $event = Event::destroy($event_id);
+
+        $event = new Event();
+        $event->where('id_table', '=', $event_id)->delete();
         return Response()->Json($event);
     }
 }

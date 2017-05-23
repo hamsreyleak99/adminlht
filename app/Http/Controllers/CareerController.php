@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Career;
+use App\Http\Controllers\Helpers\Language;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
@@ -16,9 +17,14 @@ class CareerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function view()
+    public function view(Request $request)
     {
-        $datas = Career::all()->sortByDesc('id')->values()->all();
+        Language::checkLang($request->lang);
+        $lang = Language::getTitleLang();
+
+        $career = new Career();
+
+        $datas = $career->where('lang', '=', $lang)->orderBy('created_at', 'desc')->paginate(10);
         return view('pages.careers.career', array('datas' => $datas ));
     }
 
@@ -40,35 +46,44 @@ class CareerController extends Controller
      */
     public function store(Request $request)
     {
-        $career = new Career(); 
+        
         /*validation image*/        
         $validator = Validator::make($request->all(), [
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
-        /*check has file and validation image  */
-        if($request->hasFile("image")){
+        $listLang = config('app.locales');
+        $id_table = Career::max('id_table')+1;
+
+        foreach ($listLang as $key => $value) {
+
+            /*check has file and validation image  */
             if($validator->passes()){
 
-                $image = $request->file('image');
-                $filename = time() . '.' . $image->getClientOriginalExtension();
-                Image::make($image)->resize(300, 300)->save( public_path('/uploads/images/' . $filename ));
+                $career = new Career();
 
-                $career->image = $filename;
-            }else{
-                return Response()->json(['error'=>$validator->errors()->all()]);
-            }
-        }
+                if($request->hasFile("image")){                
 
-        $career->job_title       = $request->job_title;
-        $career->job_des_and_req = $request->job_des_and_req;
-        $career->post_date = $request->post_date;
-        $career->close_date = $request->close_date;
-        $career->status = $request->status;
-        $career->created_by = auth::id();
-        $career->updated_by = auth::id();
-        $career->save();
+                    $image = $request->file('image');
+                    $filename = time() . '.' . $image->getClientOriginalExtension();
+                    Image::make($image)->resize(300, 300)->save( public_path('/uploads/images/' . $filename ));
 
+                    $career->image = $filename;
+                }
+
+                $career->id_table = $id_table;
+                $career->job_title       = $request->job_title;
+                $career->job_des_and_req = $request->job_des_and_req;
+                $career->post_date = $request->post_date;
+                $career->close_date = $request->close_date;
+                $career->status = $request->status;
+                $career->lang = $key;
+                $career->created_by = auth::id();
+                $career->updated_by = auth::id();
+                $career->save();
+
+            }       
+        } 
         return redirect('/career');
     }
 
@@ -142,7 +157,8 @@ class CareerController extends Controller
      */
     public function destroy($career_id)
     {
-         $career = Career::destroy($career_id);
+        $career = new Career();
+        $career->where('id_table', '=', $career_id)->delete();
         return response()->json($career);
     }
 }
